@@ -19,25 +19,20 @@ public class PriorityFix {
 
             // initialise variables based on first line of input
             numCommands=Integer.parseInt(init);
-            System.out.println("commands: "+numCommands);
             result = new int[numCommands];
 
             for (int i=0; i<numCommands; i++){
                 String data = scanner.nextLine();
                 String[] videoData = data.split(" ");
-                System.out.println("command "+i+" "+videoData[0]);
                 if (Objects.equals(videoData[0], "add")){
-                    System.out.println("hi ");
                     int id=Integer.parseInt(videoData[1]);
                     int year=Integer.parseInt(videoData[2]);
                     int month=Integer.parseInt(videoData[3]);
                     int day=Integer.parseInt(videoData[4]);
-                    System.out.printf("%d %d %d %d\n", id, year, month, day);
                     PriorityDate pd = new PriorityDate(year, month, day);
                     pq.enqueue(id, pd);
                 }else if (Objects.equals(videoData[0], "get")){
                     result[i] = pq.dequeue();
-                    System.out.println("bye "+result[i]);
                     output_count++;
                 }
             }
@@ -92,14 +87,12 @@ class HeapTree<T, S extends Comparable<S>>{
     }
 
     void addElement(PriorityNode<T, S> node){
-        System.out.printf("%d %d %d\n", getHeight(), (int)(Math.pow(2, getHeight()))-1, count);
         if (count==0 || root==null){
             root = node;
         }else if ((int)(Math.pow(2, getHeight()))-1 == count){
             PriorityNode<T, S> curr = root;
             while (curr.getLeft()!=null){
                 curr = curr.getLeft();
-                //System.out.println("a "+ curr.item);
             }
             curr.addInOrder(node);
             shiftUp(node);
@@ -111,7 +104,6 @@ class HeapTree<T, S extends Comparable<S>>{
             }
         }
         count++;
-        System.out.printf("%d %d %d\n", getHeight(), (int)(Math.pow(2, getHeight()))-1, count);
     }
 
     PriorityNode<T, S> removeMax(){
@@ -121,7 +113,6 @@ class HeapTree<T, S extends Comparable<S>>{
                 root=null;
             }else {
                 PriorityNode<T, S> last = last();
-                System.out.println("removeMax last(): "+last.item);
                 if (root.getLeft() != null) {
                     last.setLeft(root.getLeft());
                     root.getLeft().setParent(last);
@@ -130,7 +121,6 @@ class HeapTree<T, S extends Comparable<S>>{
                 if (root.getRight() != null) {
                     last.setRight(root.getRight());
                     root.getRight().setParent(last);
-                    System.out.println("last " + last.item);
                     last.cutFromParent();
                 }
                 this.root = last;
@@ -150,7 +140,6 @@ class HeapTree<T, S extends Comparable<S>>{
     PriorityNode<T, S> last(){
         String directions = Integer.toBinaryString(count);
         PriorityNode<T, S> curr = root;
-        System.out.println("Binary string last: "+directions);
         for (int i=1; i<directions.length(); i++){
             switch (directions.charAt(i)) {
                 case '0' -> curr = curr.getLeft();
