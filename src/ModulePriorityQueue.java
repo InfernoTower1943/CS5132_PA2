@@ -1,16 +1,23 @@
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 public class ModulePriorityQueue<T, S extends Comparable<S>> {
     Map<Pair<String, Integer>, PriorityQueue<T, S>> modulePQMap;
+    Map<Pair<String, Integer>, String> timeSlotDescriptionMap;
+
+    public ModulePriorityQueue() {
+        modulePQMap = new HashMap<>();
+        timeSlotDescriptionMap = new HashMap<>();
+    }
 
     ArrayList<PriorityQueue<T, S>> getModulePQ(String moduleCode){
         ArrayList<PriorityQueue<T, S>> result = new ArrayList<>();
         for (Pair<String, Integer> p : modulePQMap.keySet()){
-            if (p.getKey()==moduleCode){
+            if (p.getKey().equals(moduleCode)){
                 result.add(modulePQMap.get(p));
             }
         }
@@ -45,9 +52,14 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
     }
 
     void addTimeSlot(String moduleCode, Integer timeSlotID){
+        addTimeSlot(moduleCode, timeSlotID, "No description");
+    }
+
+    void addTimeSlot(String moduleCode, Integer timeSlotID, String timeSlotDescription){
         Pair<String, Integer> p = new Pair<>(moduleCode, timeSlotID);
         if (!modulePQMap.containsKey(p)){
             modulePQMap.put(p, new PriorityQueue<T, S>());
+            timeSlotDescriptionMap.put(p, timeSlotDescription);
         }
     }
 
@@ -56,6 +68,7 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
         if (modulePQMap.containsKey(p)){
             PriorityQueue<T, S> pq = modulePQMap.get(p);
             modulePQMap.remove(p);
+            timeSlotDescriptionMap.remove(p);
             return pq;
         }else{
             throw new NoSuchElementException("No time slot with module code "+moduleCode+" and ID "+timeSlotID+"exists");
