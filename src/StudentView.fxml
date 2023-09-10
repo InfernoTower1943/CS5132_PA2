@@ -58,7 +58,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="studentModuleDetailsVBox" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="studentModuleDetailsVBox" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Main">
   <children>
     <MenuBar prefWidth="911.0" VBox.vgrow="NEVER">
       <menus>
@@ -143,7 +143,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <ChoiceBox />
+                        <ChoiceBox fx:id="studentAvailableTimeSlotsChoiceBox" />
                         <GridPane>
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0" />
@@ -192,12 +192,12 @@
                           <buttons>
                             <Button mnemonicParsing="false" style="-fx-background-color: a0e698;" text="Sign Up" ButtonBar.buttonData="LEFT">
                                  <font>
-                                    <Font size="18.0" />
+                                    <Font name="System Bold" size="18.0" />
                                  </font>
                               </Button>
                               <Button mnemonicParsing="false" style="-fx-background-color: ff5459;" text="Cancel" textFill="WHITE">
                                  <font>
-                                    <Font size="18.0" />
+                                    <Font name="System Bold" size="18.0" />
                                  </font>
                               </Button>
                           </buttons>
@@ -222,13 +222,13 @@
                <content>
                   <VBox maxWidth="450.0" minWidth="450.0" prefWidth="450.0">
                      <children>
-                        <TabPane prefHeight="200.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Required Modules">
                                  <content>
-                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                    <VBox prefWidth="100.0">
                                        <children>
-                                          <ListView prefHeight="200.0" prefWidth="200.0" />
+                                          <ListView prefWidth="200.0" />
                                           <Label text="Some required modules have not been signed up for!" textFill="RED">
                                              <font>
                                                 <Font size="16.0" />
@@ -239,7 +239,19 @@
                                  </content></Tab>
                             <Tab text="My Choice List">
                                  <content>
-                                    <ListView prefHeight="200.0" prefWidth="200.0" />
+                                    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <ListView prefWidth="200.0" />
+                                          <Button fx:id="studentEditChoicesButton" mnemonicParsing="false" onAction="#studentEditChoicesButtonOnClick" style="-fx-background-color: #5b81ff;" text="Edit Choices" textFill="WHITE">
+                                             <VBox.margin>
+                                                <Insets top="20.0" />
+                                             </VBox.margin>
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </VBox>
                                  </content></Tab>
                               <Tab text="Settings" />
                           </tabs>

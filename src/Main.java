@@ -2,19 +2,28 @@ import com.sun.source.tree.Tree;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.*;
 
-public class Main extends Application{
+public class Main extends Application {
     public static void main(String[] args) {
         Application.launch(args);
+    }
+
+    @FXML
+    private void studentEditChoicesButtonOnClick(ActionEvent event) throws Exception {
+        event.consume();
+        new StudentEditChoicesController().start(new Stage());
     }
 
     @Override
@@ -40,6 +49,10 @@ public class Main extends Application{
 
         ListView studentModulesAvailableListView = (ListView) loader.getNamespace().get("studentModulesAvailableListView");
         studentModulesAvailableListView.getItems().addAll(moduleSet);
+
+        ChoiceBox studentAvailableTimeSlotsChoiceBox =
+                (ChoiceBox) loader.getNamespace().get("studentAvailableTimeSlotsChoiceBox");
+
 
         primaryStage.setTitle("Module Registration");
         primaryStage.setScene(scene);
