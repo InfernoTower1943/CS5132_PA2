@@ -1,3 +1,5 @@
+package main;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -11,7 +13,7 @@ public class PriorityFix {
         int[] result = new int[0];
         int output_count = 0;
         int numCommands = 0;
-        PriorityQueue<Integer, PriorityDate> pq = new PriorityQueue<>();
+        PriorityQueue<Integer, PriorityDate> pq = new PriorityQueue<Integer, PriorityDate>();
         try{
             File myObj = new File(filename);
             Scanner scanner = new Scanner(myObj);
@@ -57,7 +59,7 @@ public class PriorityFix {
     }
 }
 class PriorityQueue<T, S extends Comparable<S>>{
-    HeapTree<T, S> tree = new HeapTree<>();
+    HeapTree<T, S> tree = new HeapTree<T, S>();
     void enqueue(T item, S priority){
         tree.addElement(new PriorityNode<T, S>(item, priority));
     }

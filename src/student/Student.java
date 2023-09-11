@@ -1,4 +1,5 @@
-import Student.StudentEditChoicesController;
+package student;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,9 +11,16 @@ import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.*;
+import java.util.Scanner;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import main.ModulePriorityQueue;
 
-public class Main extends Application {
+public class Student extends Application{
+
+    public static main.ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<String, Integer>();
+    public static SortedSet<String> moduleSet = new TreeSet<String>();
+
     public static void main(String[] args) {
         Application.launch(args);
     }
@@ -25,14 +33,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("Student/StudentView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("student/StudentView.fxml"));
         Parent root = loader.load();
 
         Scene scene = new Scene(root, 1200, 800);
-
-        // Initialisation of Priority Queue and Module List
-        ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<>();
-        SortedSet<String> moduleSet = new TreeSet<String>();
 
         Scanner scanner = new Scanner(new File("ModulesAndTimeSlots.txt"));
         scanner.useDelimiter("\n");
@@ -51,7 +55,7 @@ public class Main extends Application {
                 (ChoiceBox) loader.getNamespace().get("studentAvailableTimeSlotsChoiceBox");
 
 
-        primaryStage.setTitle("Module Registration");
+        primaryStage.setTitle("student");
         primaryStage.setScene(scene);
         primaryStage.show();
 

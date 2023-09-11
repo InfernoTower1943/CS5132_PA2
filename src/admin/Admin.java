@@ -1,4 +1,4 @@
-package Admin;
+package admin;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;

@@ -1,3 +1,5 @@
+package main;
+
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -61,7 +63,7 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
         addTimeSlot(moduleCode, timeSlotID, "No description");
     }
 
-    void addTimeSlot(String moduleCode, Integer timeSlotID, String timeSlotDescription){
+    public void addTimeSlot(String moduleCode, Integer timeSlotID, String timeSlotDescription){
         Pair<String, Integer> p = new Pair<>(moduleCode, timeSlotID);
         if (!modulePQMap.containsKey(p)){
             modulePQMap.put(p, new PriorityQueue<T, S>());
