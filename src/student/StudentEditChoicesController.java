@@ -17,20 +17,7 @@ public class StudentEditChoicesController extends Application {
 
         Scene scene = new Scene(root, 300, 400);
 
-        Button loginButton = (Button) loader.getNamespace().get("loginButton");
-        loginButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                actionEvent.consume();
-                try {
-                    new StudentEditChoicesController().start(primaryStage);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        primaryStage.setTitle("Module Registration");
+        primaryStage.setTitle("Edit Module Preferences");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
