@@ -119,16 +119,19 @@
                         </AnchorPane>
                         <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
-                            <Tab text="Untitled Tab 1">
+                            <Tab text="Module List">
                                  <content>
                                     <VBox prefHeight="200.0" prefWidth="100.0">
                                        <children>
-                                          <ListView fx:id="adminAllModulesListView" prefWidth="250.0" />
+                                          <ListView fx:id="adminAllStudentsListView" prefWidth="250.0" />
                                        </children>
                                     </VBox>
                                  </content>
                             </Tab>
-                            <Tab text="Untitled Tab 2" />
+                            <Tab text="Student List">
+                                 <content>
+                                    <ListView fx:id="adminAllModulesListView1" prefWidth="250.0" />
+                                 </content></Tab>
                           </tabs>
                         </TabPane>
                      </children>
@@ -156,7 +159,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <ChoiceBox fx:id="studentAvailableTimeSlotsChoiceBox" />
+                        <ChoiceBox fx:id="adminAvailableTimeSlotsChoiceBox" />
                         <GridPane>
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0" />
@@ -203,7 +206,7 @@
                         <Separator prefWidth="200.0" />
                         <ButtonBar prefHeight="40.0" prefWidth="185.0">
                           <buttons>
-                            <Button mnemonicParsing="false" style="-fx-background-color: a0e698;" text="Sign Up" ButtonBar.buttonData="LEFT">
+                            <Button mnemonicParsing="false" style="-fx-background-color: #5b81ff;" text="View Priority Queue" textFill="WHITE" ButtonBar.buttonData="LEFT">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -222,11 +225,20 @@
                            </font>
                         </Label>
                         <TextArea prefHeight="200.0" prefWidth="200.0" />
-                        <Button fx:id="studentEditChoicesButton1" mnemonicParsing="false" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Button>
+                        <ButtonBar prefHeight="40.0" prefWidth="185.0">
+                           <buttons>
+                              <Button mnemonicParsing="false" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Button>
+                              <Button mnemonicParsing="false" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Button>
+                           </buttons>
+                        </ButtonBar>
                      </children>
                   </VBox>
                </content>
@@ -250,7 +262,7 @@
                                        </children>
                                     </VBox>
                                  </content></Tab>
-                            <Tab text="student's Choice List">
+                            <Tab text="Student's Module Preferences">
                                  <content>
                                     <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                                        <children>

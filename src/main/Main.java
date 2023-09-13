@@ -1,5 +1,6 @@
 package main;
 
+import admin.Admin;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +10,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import student.Student;
 import student.StudentEditChoicesController;
@@ -25,10 +28,16 @@ public class Main extends Application {
     // Initialisation of Priority Queue and Module List
     public static ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<String, Integer>();
     public static SortedSet<String> moduleSet = new TreeSet<String>();
+    public static Map<String, String> studentsLogin = new HashMap<>();
+    public static Map<String, String> adminsLogin = new HashMap<>();
 
     //@FXML Parent loginViewRoot;
     @FXML
     Button loginButton;
+    @FXML
+    TextField usernameTextBox;
+    @FXML
+    PasswordField passwordTextBox;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -38,7 +47,6 @@ public class Main extends Application {
         //Parent root = loginViewRoot;
 
         Scene scene = new Scene(root, 1200, 800);
-
         Scanner scanner = new Scanner(new File("ModulesAndTimeSlots.txt"));
         scanner.useDelimiter("\n");
         while(scanner.hasNext()){
@@ -49,20 +57,50 @@ public class Main extends Application {
         }
         scanner.close();
 
-        // TODO: student and teacher username and password file input
+        // student and Admin username and password file input
+        scanner = new Scanner(new File("StudentLoginDetails.txt"));
+        scanner.useDelimiter("\n");
+        while(scanner.hasNext()){
+            String line = scanner.next();
+            String[] args = line.split(",");
+            studentsLogin.put(args[0], args[1]);
+        }
+        scanner.close();
+
+        scanner = new Scanner(new File("AdminLoginDetails.txt"));
+        scanner.useDelimiter("\n");
+        while(scanner.hasNext()){
+            String line = scanner.next();
+            String[] args = line.split(",");
+            adminsLogin.put(args[0], args[1]);
+        }
+        scanner.close();
 
         // TODO: username and password verification
-
         loginButton = (Button) loader.getNamespace().get("loginButton");
+        usernameTextBox = (TextField) loader.getNamespace().get("usernameTextBox");
+        passwordTextBox = (PasswordField) loader.getNamespace().get("passwordTextBox");
 
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                try {
-                    new Student().start(globalStage);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (studentsLogin.containsKey(usernameTextBox.getText()) &&
+                        studentsLogin.get(usernameTextBox.getText()).equals(passwordTextBox.getText())) {
+                    try {
+                        new Student().start(globalStage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+                if (adminsLogin.containsKey(usernameTextBox.getText()) &&
+                        adminsLogin.get(usernameTextBox.getText()).equals(passwordTextBox.getText())) {
+                    try {
+                        new Admin().start(globalStage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
         });
 

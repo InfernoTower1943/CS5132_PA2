@@ -101,7 +101,7 @@
                      </font>
                   </Label>
                   <Pane minWidth="20.0" prefHeight="200.0" />
-                  <TextField minWidth="250.0" prefWidth="250.0" promptText="Enter your username..." />
+                  <TextField fx:id="usernameTextBox" minWidth="250.0" prefWidth="250.0" promptText="Enter your username..." />
                </children>
             </HBox>
             <HBox alignment="CENTER" maxWidth="500.0" prefHeight="100.0" prefWidth="200.0">
@@ -112,7 +112,7 @@
                      </font>
                   </Label>
                   <Pane minWidth="20.0" prefHeight="200.0" />
-                  <PasswordField minWidth="250.0" prefWidth="250.0" promptText="Enter your password..." />
+                  <PasswordField fx:id="passwordTextBox" minWidth="250.0" prefWidth="250.0" promptText="Enter your password..." />
                </children>
             </HBox>
             <Button fx:id="loginButton" mnemonicParsing="false" text="Login">
