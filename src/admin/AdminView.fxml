@@ -48,6 +48,7 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -186,32 +187,34 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label text="Label" GridPane.columnIndex="1">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
+                              <TextField GridPane.columnIndex="1" />
+                              <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
-                        <Separator prefWidth="200.0" />
                         <ButtonBar prefHeight="40.0" prefWidth="185.0">
-                          <buttons>
-                            <Button mnemonicParsing="false" style="-fx-background-color: #5b81ff;" text="View Priority Queue" textFill="WHITE" ButtonBar.buttonData="LEFT">
+                           <buttons>
+                              <Button mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Button>
-                              <Button mnemonicParsing="false" style="-fx-background-color: ff5459;" text="Cancel" textFill="WHITE">
+                              <Button mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Button>
+                           </buttons>
+                        </ButtonBar>
+                        <Separator prefWidth="200.0" />
+                        <ButtonBar prefHeight="40.0" prefWidth="185.0">
+                          <buttons>
+                            <Button mnemonicParsing="false" style="-fx-background-color: #a0e698;" text="View Priority Queue" ButtonBar.buttonData="LEFT">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Button>
+                              <Button maxWidth="100.0" mnemonicParsing="false" style="-fx-background-color: ff5459;" text="Delete" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -227,12 +230,12 @@
                         <TextArea prefHeight="200.0" prefWidth="200.0" />
                         <ButtonBar prefHeight="40.0" prefWidth="185.0">
                            <buttons>
-                              <Button mnemonicParsing="false" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
+                              <Button mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Button>
-                              <Button mnemonicParsing="false" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
+                              <Button mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -247,6 +250,18 @@
                <content>
                   <VBox maxWidth="450.0" minWidth="450.0" prefWidth="450.0">
                      <children>
+                        <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0" prefWidth="430.0">
+                           <children>
+                              <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Student Details" textAlignment="CENTER" wrapText="false">
+                                 <textFill>
+                                    <Color red="0.624" green="0.624" blue="0.624" fx:id="x221" />
+                                 </textFill>
+                                 <font>
+                                    <Font size="24.0" fx:id="x121" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
                         <TabPane tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Required Modules">
@@ -254,11 +269,6 @@
                                     <VBox prefWidth="100.0">
                                        <children>
                                           <ListView prefWidth="200.0" />
-                                          <Label text="Some required modules have not been signed up for!" textFill="RED">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </Label>
                                        </children>
                                     </VBox>
                                  </content></Tab>

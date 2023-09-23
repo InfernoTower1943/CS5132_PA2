@@ -76,7 +76,7 @@ public class Main extends Application {
         }
         scanner.close();
 
-        // TODO: username and password verification
+        // username and password verification
         loginButton = (Button) loader.getNamespace().get("loginButton");
         usernameTextBox = (TextField) loader.getNamespace().get("usernameTextBox");
         passwordTextBox = (PasswordField) loader.getNamespace().get("passwordTextBox");

@@ -1,19 +1,22 @@
 package student;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.Scanner;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import javafx.util.Pair;
 import main.ModulePriorityQueue;
 
 public class Student extends Application{
@@ -30,6 +33,13 @@ public class Student extends Application{
         event.consume();
         new StudentEditChoicesController().start(new Stage());
     }
+
+    @FXML
+    Label studentModuleTitleLabel;
+    @FXML
+    Label studentModuleCodeLabel;
+    @FXML
+    Label studentVacanciesLabel;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -54,6 +64,33 @@ public class Student extends Application{
         ChoiceBox studentAvailableTimeSlotsChoiceBox =
                 (ChoiceBox) loader.getNamespace().get("studentAvailableTimeSlotsChoiceBox");
 
+        studentModuleTitleLabel = (Label) loader.getNamespace().get("studentModuleTitleLabel");
+        studentModuleCodeLabel = (Label) loader.getNamespace().get("studentModuleCodeLabel");
+        studentVacanciesLabel = (Label) loader.getNamespace().get("studentVacanciesLabel");
+
+        studentModulesAvailableListView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        System.out.println("Selected Item: " + newValue);
+                        // Update choice box
+                        String moduleCode = (String) newValue;
+                        studentAvailableTimeSlotsChoiceBox.getItems().clear();
+                        for (Integer timeSlotID : modulePQ.getTimeSlotIDs(moduleCode)){
+                            studentAvailableTimeSlotsChoiceBox.getItems().add(modulePQ.getTimeSlot(moduleCode, timeSlotID));
+                        }
+                        // TODO: set module title label
+                        // set module code label
+                        studentModuleCodeLabel.setText(moduleCode);
+                    }
+                });
+
+        studentAvailableTimeSlotsChoiceBox.getSelectionModel().selectedIndexProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    Pair<String, Integer> timeSlot = modulePQ.getTimeSlotIDFromStr((String)studentAvailableTimeSlotsChoiceBox.getItems().get((Integer) newValue));
+                    System.out.println("Selected Time Slot: " +  timeSlot.toString());
+                    // TODO: set vacancies label
+                }
+        );
 
         primaryStage.setTitle("student");
         primaryStage.setScene(scene);

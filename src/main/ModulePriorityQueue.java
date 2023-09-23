@@ -18,11 +18,11 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
         moduleTimeSlotsMap = new HashMap<>();
     }
 
-    ArrayList<Integer> getTimeSlotIDs(String moduleCode){
+    public ArrayList<Integer> getTimeSlotIDs(String moduleCode){
         return moduleTimeSlotsMap.get(moduleCode);
     }
 
-    ArrayList<PriorityQueue<T, S>> getModulePQ(String moduleCode){
+    public ArrayList<PriorityQueue<T, S>> getModulePQ(String moduleCode){
         ArrayList<PriorityQueue<T, S>> result = new ArrayList<>();
         for (Pair<String, Integer> p : modulePQMap.keySet()){
             if (p.getKey().equals(moduleCode)){
@@ -32,7 +32,7 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
         return result;
     }
 
-    PriorityQueue<T, S> getTimeSlotPQ(String moduleCode, Integer timeSlotID){
+    public PriorityQueue<T, S> getTimeSlotPQ(String moduleCode, Integer timeSlotID){
         Pair<String, Integer> p = new Pair<>(moduleCode, timeSlotID);
         if (modulePQMap.containsKey(p)){
             return modulePQMap.get(p);
@@ -40,7 +40,7 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
         return null;
     }
 
-    void enqueueToTimeSlot(String moduleCode, Integer timeSlotID, T item, S priority){
+    public void enqueueToTimeSlot(String moduleCode, Integer timeSlotID, T item, S priority){
         Pair<String, Integer> p = new Pair<>(moduleCode, timeSlotID);
         if (modulePQMap.containsKey(p)){
             modulePQMap.get(p).enqueue(item, priority);
@@ -49,7 +49,7 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
         }
     }
 
-    PriorityNode<T, S> dequeueFromTimeSlot(String moduleCode, Integer timeSlotID){
+    public PriorityNode<T, S> dequeueFromTimeSlot(String moduleCode, Integer timeSlotID){
         Pair<String, Integer> p = new Pair<>(moduleCode, timeSlotID);
         if (modulePQMap.containsKey(p)){
             PriorityNode<T, S> top = modulePQMap.get(p).tree.top();
@@ -68,15 +68,40 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
         if (!modulePQMap.containsKey(p)){
             modulePQMap.put(p, new PriorityQueue<T, S>());
             timeSlotDescriptionMap.put(p, timeSlotDescription);
+            if (moduleTimeSlotsMap.containsKey(moduleCode)){
+                moduleTimeSlotsMap.get(moduleCode).add(timeSlotID);
+            }else{
+                moduleTimeSlotsMap.put(moduleCode, new ArrayList<>());
+                moduleTimeSlotsMap.get(moduleCode).add(timeSlotID);
+            }
         }
     }
 
-    PriorityQueue<T, S> deleteTimeSlot(String moduleCode, Integer timeSlotID){
+    public String getTimeSlot(String moduleCode, Integer timeSlotID){
+        Pair<String, Integer> p = new Pair<>(moduleCode, timeSlotID);
+        if (modulePQMap.containsKey(p)){
+            return timeSlotDescriptionMap.get(p);
+        }else{
+            return null;
+        }
+    }
+
+    public Pair<String, Integer> getTimeSlotIDFromStr(String timeSlotDescription){
+        for (Map.Entry<Pair<String, Integer>, String> entry : timeSlotDescriptionMap.entrySet()) {
+            if (entry.getValue().equals(timeSlotDescription)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    public PriorityQueue<T, S> deleteTimeSlot(String moduleCode, Integer timeSlotID){
         Pair<String, Integer> p = new Pair<>(moduleCode, timeSlotID);
         if (modulePQMap.containsKey(p)){
             PriorityQueue<T, S> pq = modulePQMap.get(p);
             modulePQMap.remove(p);
             timeSlotDescriptionMap.remove(p);
+            moduleTimeSlotsMap.get(moduleCode).remove(timeSlotID);
             return pq;
         }else{
             throw new NoSuchElementException("No time slot with module code "+moduleCode+" and ID "+timeSlotID+"exists");

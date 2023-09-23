@@ -170,17 +170,17 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label text="Label" GridPane.columnIndex="1">
+                              <Label fx:id="studentModuleTitleLabel" text="Select a module..." GridPane.columnIndex="1">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <Label fx:id="studentModuleCodeLabel" text="Select a module..." GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                              <Label fx:id="studentVacanciesLabel" text="Select a time slot...." GridPane.columnIndex="1" GridPane.rowIndex="2">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -190,12 +190,12 @@
                         <Separator prefWidth="200.0" />
                         <ButtonBar prefHeight="40.0" prefWidth="185.0">
                           <buttons>
-                            <Button mnemonicParsing="false" style="-fx-background-color: a0e698;" text="Sign Up" ButtonBar.buttonData="LEFT">
+                            <Button mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: a0e698;" text="Sign Up" ButtonBar.buttonData="LEFT">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Button>
-                              <Button mnemonicParsing="false" style="-fx-background-color: ff5459;" text="Cancel" textFill="WHITE">
+                              <Button mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: ff5459;" text="Cancel" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>

@@ -21,7 +21,7 @@ public class Admin extends Application{
 
     public static main.ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<String, Integer>();
     public static SortedSet<String> moduleSet = new TreeSet<String>();
-
+    public static String selectedModule = "";
     public static void main(String[] args) {
         Application.launch(args);
     }
@@ -45,7 +45,6 @@ public class Admin extends Application{
 
         ListView adminAllStudentsListView = (ListView) loader.getNamespace().get("adminAllStudentsListView");
         adminAllStudentsListView.getItems().addAll(moduleSet);
-
         ChoiceBox adminAvailableTimeSlotsChoiceBox =
                 (ChoiceBox) loader.getNamespace().get("adminAvailableTimeSlotsChoiceBox");
 
