@@ -1,5 +1,6 @@
 package admin;
 
+import com.sun.source.tree.Tree;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +22,7 @@ public class Admin extends Application{
 
     public static main.ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<String, Integer>();
     public static SortedSet<String> moduleSet = new TreeSet<String>();
+    public static SortedSet<String> studentSet = new TreeSet<String>();
     public static String selectedModule = "";
     public static void main(String[] args) {
         Application.launch(args);
@@ -42,12 +44,22 @@ public class Admin extends Application{
             moduleSet.add(args[0]);
         }
         scanner.close();
+        scanner = new Scanner(new File("StudentLoginDetails.txt"));
+        scanner.useDelimiter("\n");
+        while(scanner.hasNext()){
+            String line = scanner.next();
+            String[] args = line.split(",");
+            studentSet.add(args[0]);
+        }
+        scanner.close();
 
-        ListView adminAllStudentsListView = (ListView) loader.getNamespace().get("adminAllStudentsListView");
-        adminAllStudentsListView.getItems().addAll(moduleSet);
+        ListView adminAllModulesListView = (ListView) loader.getNamespace().get("adminAllModulesListView");
+        adminAllModulesListView.getItems().addAll(moduleSet);
         ChoiceBox adminAvailableTimeSlotsChoiceBox =
                 (ChoiceBox) loader.getNamespace().get("adminAvailableTimeSlotsChoiceBox");
 
+        ListView adminAllStudentsListView = (ListView) loader.getNamespace().get("adminAllStudentsListView");
+        adminAllStudentsListView.getItems().addAll(studentSet);
 
         primaryStage.setTitle("admin");
         primaryStage.setScene(scene);

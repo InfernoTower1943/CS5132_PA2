@@ -118,20 +118,16 @@
                               </Label>
                            </children>
                         </AnchorPane>
-                        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane prefHeight="700.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Module List">
                                  <content>
-                                    <VBox prefHeight="200.0" prefWidth="100.0">
-                                       <children>
-                                          <ListView fx:id="adminAllStudentsListView" prefWidth="250.0" />
-                                       </children>
-                                    </VBox>
+                                    <ListView fx:id="adminAllModulesListView" prefWidth="250.0" />
                                  </content>
                             </Tab>
                             <Tab text="Student List">
                                  <content>
-                                    <ListView fx:id="adminAllModulesListView1" prefWidth="250.0" />
+                                    <ListView fx:id="adminAllStudentsListView" prefWidth="250.0" />
                                  </content></Tab>
                           </tabs>
                         </TabPane>
@@ -143,7 +139,7 @@
                <content>
                   <VBox>
                      <children>
-                        <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0" prefWidth="430.0">
+                        <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0" prefWidth="450.0">
                            <children>
                               <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Module Details" textAlignment="CENTER" wrapText="false">
                                  <textFill>
@@ -182,14 +178,14 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label text="Vacancies" GridPane.rowIndex="2">
+                              <Label text="Total Spots" GridPane.rowIndex="2">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <TextField GridPane.columnIndex="1" />
-                              <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="adminModuleTitleTextBox" editable="false" GridPane.columnIndex="1" />
+                              <TextField fx:id="adminModuleCodeTextBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="adminTotalSpotsTextBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                         <ButtonBar prefHeight="40.0" prefWidth="185.0">
@@ -227,7 +223,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextArea prefHeight="200.0" prefWidth="200.0" />
+                        <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" />
                         <ButtonBar prefHeight="40.0" prefWidth="185.0">
                            <buttons>
                               <Button mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">

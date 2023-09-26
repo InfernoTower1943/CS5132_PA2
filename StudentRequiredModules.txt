@@ -1,0 +1,4 @@
+student1,ME2100
+student2,CS2100
+student3,ME2100,CS2100
+student4,

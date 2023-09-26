@@ -1,0 +1,2 @@
+CS2100,Computer Organisation
+ME2100,Methane Studies 2
