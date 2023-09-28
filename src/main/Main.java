@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import student.Student;
 import student.StudentEditChoicesController;
@@ -38,6 +39,8 @@ public class Main extends Application {
     TextField usernameTextBox;
     @FXML
     PasswordField passwordTextBox;
+    @FXML
+    Text errorText;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -80,6 +83,8 @@ public class Main extends Application {
         loginButton = (Button) loader.getNamespace().get("loginButton");
         usernameTextBox = (TextField) loader.getNamespace().get("usernameTextBox");
         passwordTextBox = (PasswordField) loader.getNamespace().get("passwordTextBox");
+        errorText = (Text) loader.getNamespace().get("errorText");
+
 
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -89,6 +94,7 @@ public class Main extends Application {
                     try {
                         new Student().start(globalStage);
                     } catch (Exception e) {
+                        errorText.setOpacity(1);
                         e.printStackTrace();
                     }
                 }
@@ -97,10 +103,13 @@ public class Main extends Application {
                     try {
                         new Admin().start(globalStage);
                     } catch (Exception e) {
+                        errorText.setOpacity(1);
                         e.printStackTrace();
                     }
                 }
-
+                else{
+                    errorText.setOpacity(1);
+                }
             }
         });
 
