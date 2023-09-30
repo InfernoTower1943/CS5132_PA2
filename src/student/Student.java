@@ -22,10 +22,19 @@ public class Student extends Application{
     public static main.ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<String, Integer>();
     public static SortedSet<String> moduleSet = new TreeSet<String>();
     public static Map<String, String> moduleDetails = new HashMap<>();
+    public static Map<String, String> moduleDescriptions = new HashMap<>();
+    public static String studentID;
 
     public static void main(String[] args) {
         Application.launch(args);
     }
+
+    // TODO: initialise the student id somehow
+    /*
+    public Student(String studentID){
+        Student.studentID = studentID;
+    }
+    */
 
     @FXML
     private void studentEditChoicesButtonOnClick(ActionEvent event) throws Exception {
@@ -34,11 +43,18 @@ public class Student extends Application{
     }
 
     @FXML
+    ComboBox studentAvailableTimeSlotsComboBox;
+
+    @FXML
     Label studentModuleTitleLabel;
     @FXML
     Label studentModuleCodeLabel;
     @FXML
     Label studentVacanciesLabel;
+    @FXML
+    TextArea moduleDescriptionTextBox;
+    @FXML
+    ListView studentRequiredModulesListView;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -61,20 +77,37 @@ public class Student extends Application{
         scanner = new Scanner(new File("ModuleDetails.txt"));
         while(scanner.hasNextLine()){
             String line = scanner.nextLine();
-            String[] args = line.split(",");
+            String[] args = line.split(",", 3);
             moduleDetails.put(args[0], args[1]);
+            moduleDescriptions.put(args[0], args[2]);
         }
+        scanner.close();
+
+        /*
+        studentRequiredModulesListView = (ListView) loader.getNamespace().get("studentRequiredModulesListView");
+        scanner = new Scanner(new File("StudentRequiredModules.txt"));
+        while(scanner.hasNextLine()){
+            String line = scanner.nextLine();
+            String[] args = line.split(",");
+            if (args[0].equals(studentID)){
+                for (int i=1; i<args.length; i++) {
+                    studentRequiredModulesListView.getItems().add(args[i]);
+                }
+            }
+        }*/
+
         scanner.close();
 
         ListView studentModulesAvailableListView = (ListView) loader.getNamespace().get("studentModulesAvailableListView");
         studentModulesAvailableListView.getItems().addAll(moduleSet);
 
-        ChoiceBox studentAvailableTimeSlotsChoiceBox =
-                (ChoiceBox) loader.getNamespace().get("studentAvailableTimeSlotsChoiceBox");
+        studentAvailableTimeSlotsComboBox = (ComboBox) loader.getNamespace().get("studentAvailableTimeSlotsComboBox");
 
         studentModuleTitleLabel = (Label) loader.getNamespace().get("studentModuleTitleLabel");
         studentModuleCodeLabel = (Label) loader.getNamespace().get("studentModuleCodeLabel");
         studentVacanciesLabel = (Label) loader.getNamespace().get("studentVacanciesLabel");
+        moduleDescriptionTextBox = (TextArea) loader.getNamespace().get("moduleDescriptionTextBox");
+        studentRequiredModulesListView = (ListView) loader.getNamespace().get("studentRequiredModulesListView");
 
         studentModulesAvailableListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -82,20 +115,22 @@ public class Student extends Application{
                         System.out.println("Selected Item: " + newValue);
                         // Update choice box
                         String moduleCode = (String) newValue;
-                        studentAvailableTimeSlotsChoiceBox.getItems().clear();
+                        studentAvailableTimeSlotsComboBox.getItems().clear();
                         for (Integer timeSlotID : modulePQ.getTimeSlotIDs(moduleCode)){
-                            studentAvailableTimeSlotsChoiceBox.getItems().add(modulePQ.getTimeSlot(moduleCode, timeSlotID));
+                            studentAvailableTimeSlotsComboBox.getItems().add(modulePQ.getTimeSlot(moduleCode, timeSlotID));
                         }
                         // set module title label
                         studentModuleTitleLabel.setText(moduleDetails.get(moduleCode));
                         // set module code label
                         studentModuleCodeLabel.setText(moduleCode);
+                        // set module description
+                        moduleDescriptionTextBox.setText(moduleDescriptions.get(moduleCode));
                     }
                 });
 
-        studentAvailableTimeSlotsChoiceBox.getSelectionModel().selectedIndexProperty().addListener(
+        studentAvailableTimeSlotsComboBox.getSelectionModel().selectedIndexProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    Pair<String, Integer> timeSlot = modulePQ.getTimeSlotIDFromStr((String)studentAvailableTimeSlotsChoiceBox.getItems().get((Integer) newValue));
+                    Pair<String, Integer> timeSlot = modulePQ.getTimeSlotIDFromStr((String)(studentAvailableTimeSlotsComboBox.getItems().get((Integer) newValue)));
                     System.out.println("Selected Time Slot: " +  timeSlot.toString());
                     // TODO: set vacancies label
                 }

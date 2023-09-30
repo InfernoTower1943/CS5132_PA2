@@ -35,7 +35,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
@@ -100,7 +100,7 @@
         </Menu>
       </menus>
     </MenuBar>
-    <SplitPane dividerPositions="0.2505567928730512, 0.5" focusTraversable="true" prefHeight="-1.0" prefWidth="150.0" VBox.vgrow="ALWAYS">
+    <SplitPane fx:id="mainSplitPane" dividerPositions="0.25, 0.5" focusTraversable="true" prefHeight="-1.0" prefWidth="150.0" VBox.vgrow="ALWAYS">
       <items>
             <ScrollPane maxWidth="250.0" minWidth="250.0" prefHeight="800.0" prefWidth="250.0">
                <content>
@@ -137,7 +137,7 @@
             </ScrollPane>
         <ScrollPane prefWidth="-1.0">
                <content>
-                  <VBox>
+                  <VBox fx:id="moduleDetailsVBox">
                      <children>
                         <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0" prefWidth="450.0">
                            <children>
@@ -156,7 +156,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <ChoiceBox fx:id="adminAvailableTimeSlotsChoiceBox" />
+                        <ComboBox fx:id="adminAvailableTimeSlotsComboBox" />
                         <GridPane>
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0" />
@@ -190,12 +190,12 @@
                         </GridPane>
                         <ButtonBar prefHeight="40.0" prefWidth="185.0">
                            <buttons>
-                              <Button mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
+                              <Button fx:id="timeSlotEditButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Button>
-                              <Button mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
+                              <Button fx:id="timeSlotSaveButton" disable="true" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -223,15 +223,15 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" />
+                        <TextArea fx:id="moduleDescriptionTextBox" editable="false" prefHeight="200.0" prefWidth="200.0" />
                         <ButtonBar prefHeight="40.0" prefWidth="185.0">
                            <buttons>
-                              <Button mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
+                              <Button fx:id="descriptionEditButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Button>
-                              <Button mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
+                              <Button fx:id="descriptionSaveButton" disable="true" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -244,7 +244,7 @@
         </ScrollPane>
             <ScrollPane maxWidth="450.0" minWidth="450.0" prefHeight="-1.0" prefWidth="450.0">
                <content>
-                  <VBox maxWidth="450.0" minWidth="450.0" prefWidth="450.0">
+                  <VBox fx:id="studentDetailsVBox" maxWidth="450.0" minWidth="450.0" prefWidth="450.0">
                      <children>
                         <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0" prefWidth="430.0">
                            <children>

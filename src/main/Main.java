@@ -65,7 +65,6 @@ public class Main extends Application {
             String line = scanner.nextLine();
             String[] args = line.split(",");
             studentsLogin.put(args[0], args[1]);
-            System.out.printf("'%s' '%s'", args[0], args[1]);
         }
         scanner.close();
 
@@ -83,7 +82,6 @@ public class Main extends Application {
         passwordTextBox = (PasswordField) loader.getNamespace().get("passwordTextBox");
         errorText = (Text) loader.getNamespace().get("errorText");
 
-
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -91,6 +89,7 @@ public class Main extends Application {
                         studentsLogin.get(usernameTextBox.getText()).equals(passwordTextBox.getText())) {
                     try {
                         new Student().start(globalStage);
+                        //new Student(usernameTextBox.getText()).start(globalStage);
                     } catch (Exception e) {
                         errorText.setText("An error occurred: " + e.getClass().getCanonicalName());
                         errorText.setOpacity(1);
