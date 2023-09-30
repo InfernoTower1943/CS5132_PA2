@@ -51,9 +51,8 @@ public class Main extends Application {
 
         Scene scene = new Scene(root, 1200, 800);
         Scanner scanner = new Scanner(new File("ModulesAndTimeSlots.txt"));
-        scanner.useDelimiter("\n");
-        while(scanner.hasNext()){
-            String line = scanner.next();
+        while(scanner.hasNextLine()){
+            String line = scanner.nextLine();
             String[] args = line.split(",");
             modulePQ.addTimeSlot(args[0], Integer.parseInt(args[1]), args[2]);
             moduleSet.add(args[0]);
@@ -62,18 +61,17 @@ public class Main extends Application {
 
         // student and Admin username and password file input
         scanner = new Scanner(new File("StudentLoginDetails.txt"));
-        scanner.useDelimiter("\n");
-        while(scanner.hasNext()){
-            String line = scanner.next();
+        while(scanner.hasNextLine()){
+            String line = scanner.nextLine();
             String[] args = line.split(",");
             studentsLogin.put(args[0], args[1]);
+            System.out.printf("'%s' '%s'", args[0], args[1]);
         }
         scanner.close();
 
         scanner = new Scanner(new File("AdminLoginDetails.txt"));
-        scanner.useDelimiter("\n");
-        while(scanner.hasNext()){
-            String line = scanner.next();
+        while(scanner.hasNextLine()){
+            String line = scanner.nextLine();
             String[] args = line.split(",");
             adminsLogin.put(args[0], args[1]);
         }
@@ -94,20 +92,23 @@ public class Main extends Application {
                     try {
                         new Student().start(globalStage);
                     } catch (Exception e) {
+                        errorText.setText("An error occurred: " + e.getClass().getCanonicalName());
                         errorText.setOpacity(1);
                         e.printStackTrace();
                     }
                 }
-                if (adminsLogin.containsKey(usernameTextBox.getText()) &&
+                else if (adminsLogin.containsKey(usernameTextBox.getText()) &&
                         adminsLogin.get(usernameTextBox.getText()).equals(passwordTextBox.getText())) {
                     try {
                         new Admin().start(globalStage);
                     } catch (Exception e) {
+                        errorText.setText("An error occurred: " + e.getClass().getCanonicalName());
                         errorText.setOpacity(1);
                         e.printStackTrace();
                     }
                 }
                 else{
+                    errorText.setText("Incorrect username or password");
                     errorText.setOpacity(1);
                 }
             }

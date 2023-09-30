@@ -12,9 +12,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.Scanner;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 import javafx.util.Pair;
 import main.ModulePriorityQueue;
@@ -23,6 +21,7 @@ public class Student extends Application{
 
     public static main.ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<String, Integer>();
     public static SortedSet<String> moduleSet = new TreeSet<String>();
+    public static Map<String, String> moduleDetails = new HashMap<>();
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -58,6 +57,15 @@ public class Student extends Application{
         }
         scanner.close();
 
+
+        scanner = new Scanner(new File("ModuleDetails.txt"));
+        while(scanner.hasNextLine()){
+            String line = scanner.nextLine();
+            String[] args = line.split(",");
+            moduleDetails.put(args[0], args[1]);
+        }
+        scanner.close();
+
         ListView studentModulesAvailableListView = (ListView) loader.getNamespace().get("studentModulesAvailableListView");
         studentModulesAvailableListView.getItems().addAll(moduleSet);
 
@@ -78,7 +86,8 @@ public class Student extends Application{
                         for (Integer timeSlotID : modulePQ.getTimeSlotIDs(moduleCode)){
                             studentAvailableTimeSlotsChoiceBox.getItems().add(modulePQ.getTimeSlot(moduleCode, timeSlotID));
                         }
-                        // TODO: set module title label
+                        // set module title label
+                        studentModuleTitleLabel.setText(moduleDetails.get(moduleCode));
                         // set module code label
                         studentModuleCodeLabel.setText(moduleCode);
                     }
