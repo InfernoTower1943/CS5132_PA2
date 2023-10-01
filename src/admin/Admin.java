@@ -27,6 +27,7 @@ public class Admin extends Application{
     public static Map<String, String> moduleDescriptions = new HashMap<>();
 
     public static SortedSet<String> studentSet = new TreeSet<String>();
+    public static Map<String, SortedSet<String>> studentsRequiredModules = new HashMap<>();
     public static String selectedModule = "";
     public static void main(String[] args) {
         Application.launch(args);
@@ -63,7 +64,8 @@ public class Admin extends Application{
     Button descriptionEditButton;
     @FXML
     Button descriptionSaveButton;
-
+    @FXML
+    ListView adminRequiredModulesListView;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -99,6 +101,19 @@ public class Admin extends Application{
         }
         scanner.close();
 
+        scanner = new Scanner(new File("StudentRequiredModules.txt"));
+        while(scanner.hasNextLine()){
+            String line = scanner.nextLine();
+            String[] args = line.split(",");
+            if (!studentsRequiredModules.containsKey(args[0])) {
+                studentsRequiredModules.put(args[0], new TreeSet<String>());
+            }
+            for (int i=1; i<args.length; i++) {
+                studentsRequiredModules.get(args[0]).add(args[i]);
+            }
+        }
+        scanner.close();
+
         mainSplitPane = (SplitPane) loader.getNamespace().get("mainSplitPane");
 
         moduleDetailsVBox = (VBox) loader.getNamespace().get("moduleDetailsVBox");
@@ -111,6 +126,7 @@ public class Admin extends Application{
 
         adminAllStudentsListView = (ListView) loader.getNamespace().get("adminAllStudentsListView");
         adminAllStudentsListView.getItems().addAll(studentSet);
+        adminRequiredModulesListView = (ListView) loader.getNamespace().get("adminRequiredModulesListView");
 
 
         adminModuleTitleTextBox = (TextField) loader.getNamespace().get("adminModuleTitleTextBox");
@@ -129,6 +145,7 @@ public class Admin extends Application{
 
                         // TODO: make student details VBox invisible and expand the module details VBox pane somehow
                         //mainSplitPane.getItems().remove(studentDetailsVBox);
+                        moduleDetailsVBox.setVisible(true);
                         studentDetailsVBox.setVisible(false);
                         //mainSplitPane.setDividerPosition();
 
@@ -145,6 +162,20 @@ public class Admin extends Application{
                         adminModuleCodeTextBox.setText(moduleCode);
                         // set module description
                         moduleDescriptionTextBox.setText(moduleDescriptions.get(moduleCode));
+                    }
+                });
+
+        adminAllStudentsListView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+
+                        // TODO: make modules details VBox invisible and expand the student details VBox pane somehow
+                        moduleDetailsVBox.setVisible(false);
+                        studentDetailsVBox.setVisible(true);
+
+                        String studentID = (String) newValue;
+                        adminRequiredModulesListView.getItems().clear();
+                        adminRequiredModulesListView.getItems().addAll(studentsRequiredModules.get(studentID));
                     }
                 });
 

@@ -88,6 +88,7 @@ public class Main extends Application {
                 if (studentsLogin.containsKey(usernameTextBox.getText()) &&
                         studentsLogin.get(usernameTextBox.getText()).equals(passwordTextBox.getText())) {
                     try {
+                        Student.studentID = usernameTextBox.getText();
                         new Student().start(globalStage);
                         //new Student(usernameTextBox.getText()).start(globalStage);
                     } catch (Exception e) {

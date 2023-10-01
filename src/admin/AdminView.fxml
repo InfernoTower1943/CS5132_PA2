@@ -156,7 +156,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="adminAvailableTimeSlotsComboBox" />
+                        <ComboBox fx:id="adminAvailableTimeSlotsComboBox" prefWidth="400.0" />
                         <GridPane>
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0" />
@@ -223,7 +223,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <TextArea fx:id="moduleDescriptionTextBox" editable="false" prefHeight="200.0" prefWidth="200.0" />
+                        <TextArea fx:id="moduleDescriptionTextBox" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
                         <ButtonBar prefHeight="40.0" prefWidth="185.0">
                            <buttons>
                               <Button fx:id="descriptionEditButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
@@ -264,7 +264,7 @@
                                  <content>
                                     <VBox prefWidth="100.0">
                                        <children>
-                                          <ListView prefWidth="200.0" />
+                                          <ListView fx:id="adminRequiredModulesListView" prefWidth="200.0" />
                                        </children>
                                     </VBox>
                                  </content></Tab>

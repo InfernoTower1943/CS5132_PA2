@@ -29,13 +29,6 @@ public class Student extends Application{
         Application.launch(args);
     }
 
-    // TODO: initialise the student id somehow
-    /*
-    public Student(String studentID){
-        Student.studentID = studentID;
-    }
-    */
-
     @FXML
     private void studentEditChoicesButtonOnClick(ActionEvent event) throws Exception {
         event.consume();
@@ -83,7 +76,7 @@ public class Student extends Application{
         }
         scanner.close();
 
-        /*
+
         studentRequiredModulesListView = (ListView) loader.getNamespace().get("studentRequiredModulesListView");
         scanner = new Scanner(new File("StudentRequiredModules.txt"));
         while(scanner.hasNextLine()){
@@ -94,8 +87,7 @@ public class Student extends Application{
                     studentRequiredModulesListView.getItems().add(args[i]);
                 }
             }
-        }*/
-
+        }
         scanner.close();
 
         ListView studentModulesAvailableListView = (ListView) loader.getNamespace().get("studentModulesAvailableListView");
