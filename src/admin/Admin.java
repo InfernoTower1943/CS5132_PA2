@@ -66,6 +66,10 @@ public class Admin extends Application{
     Button descriptionSaveButton;
     @FXML
     ListView adminRequiredModulesListView;
+    @FXML
+    Button requiredModulesEditButton;
+    @FXML
+    Button requiredModulesSaveButton;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -138,6 +142,8 @@ public class Admin extends Application{
         timeSlotSaveButton = (Button) loader.getNamespace().get("timeSlotSaveButton");
         descriptionEditButton = (Button) loader.getNamespace().get("descriptionEditButton");
         descriptionSaveButton = (Button) loader.getNamespace().get("descriptionSaveButton");
+        requiredModulesEditButton = (Button) loader.getNamespace().get("requiredModulesEditButton");
+        requiredModulesSaveButton = (Button) loader.getNamespace().get("requiredModulesSaveButton");
 
         adminAllModulesListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -175,7 +181,16 @@ public class Admin extends Application{
 
                         String studentID = (String) newValue;
                         adminRequiredModulesListView.getItems().clear();
-                        adminRequiredModulesListView.getItems().addAll(studentsRequiredModules.get(studentID));
+
+                        SortedSet<String> required = studentsRequiredModules.get(studentID);
+                        for (String moduleCode : moduleSet){
+                            CheckBox cb = new CheckBox(moduleCode);
+                            if (required.contains(moduleCode)){
+                                cb.setSelected(true);
+                            }
+                            adminRequiredModulesListView.getItems().add(cb);
+                        }
+                        //adminRequiredModulesListView.getItems().addAll();
                     }
                 });
 
@@ -216,6 +231,24 @@ public class Admin extends Application{
                 moduleDescriptionTextBox.setEditable(false);
                 descriptionEditButton.setDisable(false);
                 descriptionSaveButton.setDisable(true);
+            }
+        });
+
+        requiredModulesEditButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                adminRequiredModulesListView.setDisable(false);
+                requiredModulesEditButton.setDisable(true);
+                requiredModulesSaveButton.setDisable(false);
+            }
+        });
+
+        requiredModulesSaveButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                adminRequiredModulesListView.setDisable(true);
+                requiredModulesEditButton.setDisable(false);
+                requiredModulesSaveButton.setDisable(true);
             }
         });
 
