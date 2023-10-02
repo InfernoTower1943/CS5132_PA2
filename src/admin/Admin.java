@@ -15,11 +15,13 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.*;
 
+import main.Main;
 import main.ModulePriorityQueue;
 import student.Student;
 import student.StudentEditChoicesController;
 
 public class Admin extends Application{
+    private Stage globalStage;
 
     public static main.ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<String, Integer>();
     public static SortedSet<String> moduleSet = new TreeSet<String>();
@@ -70,9 +72,12 @@ public class Admin extends Application{
     Button requiredModulesEditButton;
     @FXML
     Button requiredModulesSaveButton;
+    @FXML
+    Button logoutButton;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        globalStage = primaryStage;
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("admin/AdminView.fxml"));
         Parent root = loader.load();
 
@@ -144,6 +149,7 @@ public class Admin extends Application{
         descriptionSaveButton = (Button) loader.getNamespace().get("descriptionSaveButton");
         requiredModulesEditButton = (Button) loader.getNamespace().get("requiredModulesEditButton");
         requiredModulesSaveButton = (Button) loader.getNamespace().get("requiredModulesSaveButton");
+        logoutButton = (Button) loader.getNamespace().get("logoutButton");
 
         adminAllModulesListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -249,6 +255,17 @@ public class Admin extends Application{
                 adminRequiredModulesListView.setDisable(true);
                 requiredModulesEditButton.setDisable(false);
                 requiredModulesSaveButton.setDisable(true);
+            }
+        });
+
+        logoutButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    new Main().start(globalStage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

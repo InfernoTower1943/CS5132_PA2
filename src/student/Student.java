@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,9 +16,11 @@ import java.io.File;
 import java.util.*;
 
 import javafx.util.Pair;
+import main.Main;
 import main.ModulePriorityQueue;
 
 public class Student extends Application{
+    private Stage globalStage;
 
     public static main.ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<String, Integer>();
     public static SortedSet<String> moduleSet = new TreeSet<String>();
@@ -48,9 +51,12 @@ public class Student extends Application{
     TextArea moduleDescriptionTextBox;
     @FXML
     ListView studentRequiredModulesListView;
+    @FXML
+    Button logoutButton;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        globalStage = primaryStage;
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("student/StudentView.fxml"));
         Parent root = loader.load();
 
@@ -100,6 +106,7 @@ public class Student extends Application{
         studentVacanciesLabel = (Label) loader.getNamespace().get("studentVacanciesLabel");
         moduleDescriptionTextBox = (TextArea) loader.getNamespace().get("moduleDescriptionTextBox");
         studentRequiredModulesListView = (ListView) loader.getNamespace().get("studentRequiredModulesListView");
+        logoutButton = (Button) loader.getNamespace().get("logoutButton");
 
         studentModulesAvailableListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -127,6 +134,18 @@ public class Student extends Application{
                     // TODO: set vacancies label
                 }
         );
+
+        logoutButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    new Main().start(globalStage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
         primaryStage.setTitle("student");
         primaryStage.setScene(scene);
