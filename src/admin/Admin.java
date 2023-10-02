@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.*;
 
 import main.Main;
@@ -31,9 +32,11 @@ public class Admin extends Application{
     public static SortedSet<String> studentSet = new TreeSet<String>();
     public static Map<String, SortedSet<String>> studentsRequiredModules = new HashMap<>();
     public static String selectedModule = "";
+
     public static void main(String[] args) {
         Application.launch(args);
     }
+
 
     @FXML
     SplitPane mainSplitPane;
@@ -104,7 +107,7 @@ public class Admin extends Application{
         scanner.close();
 
         scanner = new Scanner(new File("ModuleDetails.txt"));
-        while(scanner.hasNextLine()){
+        while(scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] args = line.split(",", 3);
             moduleDetails.put(args[0], args[1]);
@@ -164,17 +167,17 @@ public class Admin extends Application{
                         mainSplitPane.setDividerPositions(0.25, 1);
 
                         // Update choice box
-                        String moduleCode = (String) newValue;
+                        selectedModule = (String) newValue;
                         adminAvailableTimeSlotsComboBox.getItems().clear();
-                        for (Integer timeSlotID : modulePQ.getTimeSlotIDs(moduleCode)){
-                            adminAvailableTimeSlotsComboBox.getItems().add(modulePQ.getTimeSlot(moduleCode, timeSlotID));
+                        for (Integer timeSlotID : modulePQ.getTimeSlotIDs(selectedModule)){
+                            adminAvailableTimeSlotsComboBox.getItems().add(modulePQ.getTimeSlot(selectedModule, timeSlotID));
                         }
                         // set module title label
-                        adminModuleTitleTextBox.setText(moduleDetails.get(moduleCode));
+                        adminModuleTitleTextBox.setText(moduleDetails.get(selectedModule));
                         // set module code label
-                        adminModuleCodeTextBox.setText(moduleCode);
+                        adminModuleCodeTextBox.setText(selectedModule);
                         // set module description
-                        moduleDescriptionTextBox.setText(moduleDescriptions.get(moduleCode));
+                        moduleDescriptionTextBox.setText(moduleDescriptions.get(selectedModule));
                     }
                 });
 
@@ -221,6 +224,24 @@ public class Admin extends Application{
                 adminTotalSpotsTextBox.setEditable(false);
                 timeSlotEditButton.setDisable(false);
                 timeSlotSaveButton.setDisable(true);
+                moduleDetails.remove(selectedModule);
+                String title=adminModuleTitleTextBox.getText();
+                String code=adminModuleCodeTextBox.getText();
+                moduleDetails.put(code,title);
+                moduleDescriptions.put(code,moduleDescriptions.get(selectedModule));
+                moduleDescriptions.remove(selectedModule);
+                moduleSet.remove(selectedModule);
+                moduleSet.add(code);
+                adminAllModulesListView.getItems().clear();
+                adminAllModulesListView.getItems().addAll(moduleSet);
+                ArrayList<Integer> list =new ArrayList<>(modulePQ.getTimeSlotIDs(selectedModule));
+                System.out.println("hi");
+                for (int num:list){
+                    System.out.println(num);
+                    String description=modulePQ.getTimeSlot(selectedModule,num);
+                    modulePQ.deleteTimeSlot(selectedModule,num);
+                    modulePQ.addTimeSlot(code,num,description);
+                }
             }
         });
 
@@ -239,6 +260,8 @@ public class Admin extends Application{
                 moduleDescriptionTextBox.setEditable(false);
                 descriptionEditButton.setDisable(false);
                 descriptionSaveButton.setDisable(true);
+                String description=moduleDescriptionTextBox.getText();
+                moduleDescriptions.put(selectedModule,description);
             }
         });
 
@@ -255,6 +278,7 @@ public class Admin extends Application{
             @Override
             public void handle(ActionEvent actionEvent) {
                 adminRequiredModulesListView.setDisable(true);
+
                 requiredModulesEditButton.setDisable(false);
                 requiredModulesSaveButton.setDisable(true);
             }
