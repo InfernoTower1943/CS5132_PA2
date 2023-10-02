@@ -13,6 +13,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -28,6 +31,9 @@ public class Admin extends Application{
     public static SortedSet<String> moduleSet = new TreeSet<String>();
     public static Map<String, String> moduleDetails = new HashMap<>();
     public static Map<String, String> moduleDescriptions = new HashMap<>();
+    public static Map<String, Integer> timeVacancy= new HashMap<>();
+    public static Map<String, Integer> timeTotal= new HashMap<>();
+
 
     public static SortedSet<String> studentSet = new TreeSet<String>();
     public static Map<String, SortedSet<String>> studentsRequiredModules = new HashMap<>();
@@ -93,6 +99,8 @@ public class Admin extends Application{
             String[] args = line.split(",");
             modulePQ.addTimeSlot(args[0], Integer.parseInt(args[1]), args[2]);
             moduleSet.add(args[0]);
+            timeVacancy.put(args[2],Integer.parseInt(args[3]));
+            timeTotal.put(args[2],Integer.parseInt(args[4].strip()));
         }
         scanner.close();
         scanner = new Scanner(new File("StudentLoginDetails.txt"));
@@ -233,12 +241,15 @@ public class Admin extends Application{
                 adminAllModulesListView.getItems().clear();
                 adminAllModulesListView.getItems().addAll(moduleSet);
                 ArrayList<Integer> list =new ArrayList<>(modulePQ.getTimeSlotIDs(selectedModule));
-                System.out.println("hi");
                 for (int num:list){
-                    System.out.println(num);
                     String description=modulePQ.getTimeSlot(selectedModule,num);
                     modulePQ.deleteTimeSlot(selectedModule,num);
                     modulePQ.addTimeSlot(code,num,description);
+                }
+                try {
+                    write();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -260,6 +271,11 @@ public class Admin extends Application{
                 descriptionSaveButton.setDisable(true);
                 String description=moduleDescriptionTextBox.getText();
                 moduleDescriptions.put(selectedModule,description);
+                try {
+                    write();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -298,5 +314,20 @@ public class Admin extends Application{
         primaryStage.show();
 
 
+    }
+
+    private static void write() throws IOException {
+        FileWriter outputStream = new FileWriter("ModuleDetails.txt");
+        FileWriter outputStream1 = new FileWriter("ModulesAndTimeSlots.txt");
+        for (String string:moduleSet) {
+            outputStream.write(string + "," + moduleDetails.get(string) + "," + moduleDescriptions.get(string)+"\n");
+            ArrayList<Integer> list = new ArrayList<>(modulePQ.getTimeSlotIDs(string));
+            for (int num : list) {
+                String description = modulePQ.getTimeSlot(string, num);
+                outputStream1.write(string+","+num+","+description+","+timeVacancy.get(description)+','+timeTotal.get(description)+"\n");
+            }
+        }
+        outputStream.close();
+        outputStream1.close();
     }
 }
