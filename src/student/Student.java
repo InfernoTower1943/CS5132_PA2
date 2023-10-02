@@ -27,6 +27,8 @@ public class Student extends Application{
     public static Map<String, String> moduleDetails = new HashMap<>();
     public static Map<String, String> moduleDescriptions = new HashMap<>();
     public static String studentID;
+    public static String currentModuleCode;
+    public static String currentTimeSlot;
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -53,6 +55,10 @@ public class Student extends Application{
     ListView studentRequiredModulesListView;
     @FXML
     Button logoutButton;
+    @FXML
+    Button signUpButton;
+    @FXML
+    Button studentSignUpCancelButton;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -107,6 +113,8 @@ public class Student extends Application{
         moduleDescriptionTextBox = (TextArea) loader.getNamespace().get("moduleDescriptionTextBox");
         studentRequiredModulesListView = (ListView) loader.getNamespace().get("studentRequiredModulesListView");
         logoutButton = (Button) loader.getNamespace().get("logoutButton");
+        signUpButton = (Button) loader.getNamespace().get("signUpButton");
+        studentSignUpCancelButton = (Button) loader.getNamespace().get("studentSignUpCancelButton");
 
         studentModulesAvailableListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -134,6 +142,13 @@ public class Student extends Application{
                     // TODO: set vacancies label
                 }
         );
+
+        signUpButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                //modulePQ.getTimeSlotPQ();
+            }
+        });
 
         logoutButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
