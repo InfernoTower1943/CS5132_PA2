@@ -107,4 +107,8 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
             throw new NoSuchElementException("No time slot with module code "+moduleCode+" and ID "+timeSlotID+"exists");
         }
     }
+
+    long getPriority(boolean isRequired, int preference, long time){
+        return (isRequired?1:0)*(long)Math.pow(10,12) + preference*(long)Math.pow(10,10)+time;
+    }
 }
