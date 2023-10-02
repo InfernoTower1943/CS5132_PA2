@@ -47,9 +47,11 @@ public class Admin extends Application{
     @FXML
     SplitPane mainSplitPane;
     @FXML
-    VBox moduleDetailsVBox;
+    ScrollPane firstPane;
     @FXML
-    VBox studentDetailsVBox;
+    ScrollPane moduleDetailsPane;
+    @FXML
+    ScrollPane studentDetailsPane;
 
 
     @FXML
@@ -136,8 +138,9 @@ public class Admin extends Application{
 
         mainSplitPane = (SplitPane) loader.getNamespace().get("mainSplitPane");
 
-        moduleDetailsVBox = (VBox) loader.getNamespace().get("moduleDetailsVBox");
-        studentDetailsVBox = (VBox) loader.getNamespace().get("studentDetailsVBox");
+        firstPane = (ScrollPane) loader.getNamespace().get("firstPane");
+        moduleDetailsPane = (ScrollPane) loader.getNamespace().get("moduleDetailsPane");
+        studentDetailsPane = (ScrollPane) loader.getNamespace().get("studentDetailsPane");
 
 
         adminAllModulesListView = (ListView) loader.getNamespace().get("adminAllModulesListView");
@@ -167,11 +170,9 @@ public class Admin extends Application{
                     if (newValue != null) {
 
                         // TODO: make student details VBox invisible and expand the module details VBox pane somehow
-                        //mainSplitPane.getItems().remove(studentDetailsVBox);
-                        moduleDetailsVBox.setVisible(true);
-                        studentDetailsVBox.setVisible(false);
-                        //mainSplitPane.setDividerPosition();
-
+                        moduleDetailsPane.setVisible(true);
+                        studentDetailsPane.setVisible(false);
+                        mainSplitPane.setDividerPositions(0.25, 1);
 
                         // Update choice box
                         selectedModule = (String) newValue;
@@ -193,8 +194,9 @@ public class Admin extends Application{
                     if (newValue != null) {
 
                         // TODO: make modules details VBox invisible and expand the student details VBox pane somehow
-                        moduleDetailsVBox.setVisible(false);
-                        studentDetailsVBox.setVisible(true);
+                        moduleDetailsPane.setVisible(false);
+                        studentDetailsPane.setVisible(true);
+                        mainSplitPane.setDividerPositions(0.25, 0.25);
 
                         String studentID = (String) newValue;
                         adminRequiredModulesListView.getItems().clear();

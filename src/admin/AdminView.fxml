@@ -59,7 +59,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="studentModuleDetailsVBox" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Main">
+<VBox prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Main">
   <children>
     <MenuBar prefWidth="911.0" VBox.vgrow="NEVER">
       <menus>
@@ -100,13 +100,13 @@
         </Menu>
       </menus>
     </MenuBar>
-    <SplitPane fx:id="mainSplitPane" dividerPositions="0.25, 0.5" focusTraversable="true" prefHeight="-1.0" prefWidth="150.0" VBox.vgrow="ALWAYS">
+    <SplitPane fx:id="mainSplitPane" dividerPositions="0.25, 0.65" focusTraversable="true" prefHeight="800.0" VBox.vgrow="ALWAYS">
       <items>
-            <ScrollPane maxWidth="250.0" minWidth="250.0" prefHeight="800.0" prefWidth="250.0">
+            <ScrollPane fx:id="firstPane" prefHeight="800.0">
                <content>
-                  <VBox prefWidth="250.0">
+                  <VBox>
                      <children>
-                        <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0" prefWidth="250.0">
+                        <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0">
                            <children>
                               <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Modules and Students" textAlignment="CENTER" wrapText="false">
                                  <font>
@@ -118,7 +118,7 @@
                               </Label>
                            </children>
                         </AnchorPane>
-                        <TabPane prefHeight="550.0" prefWidth="250.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane prefHeight="600.0" prefWidth="270.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Module List">
                                  <content>
@@ -140,9 +140,9 @@
                   </VBox>
                </content>
             </ScrollPane>
-        <ScrollPane prefWidth="-1.0">
+        <ScrollPane fx:id="moduleDetailsPane" prefHeight="800.0" prefWidth="-1.0">
                <content>
-                  <VBox fx:id="moduleDetailsVBox">
+                  <VBox>
                      <children>
                         <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0" prefWidth="450.0">
                            <children>
@@ -193,7 +193,7 @@
                               <TextField fx:id="adminTotalSpotsTextBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
-                        <ButtonBar prefHeight="40.0" prefWidth="185.0">
+                        <ButtonBar buttonMinWidth="0.0" prefHeight="40.0" prefWidth="185.0">
                            <buttons>
                               <Button fx:id="timeSlotEditButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
                                  <font>
@@ -229,7 +229,7 @@
                            </font>
                         </Label>
                         <TextArea fx:id="moduleDescriptionTextBox" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
-                        <ButtonBar prefHeight="40.0" prefWidth="185.0">
+                        <ButtonBar buttonMinWidth="0.0" prefHeight="40.0" prefWidth="185.0">
                            <buttons>
                               <Button fx:id="descriptionEditButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
                                  <font>
@@ -247,11 +247,11 @@
                   </VBox>
                </content>
         </ScrollPane>
-            <ScrollPane maxWidth="450.0" minWidth="450.0" prefHeight="-1.0" prefWidth="450.0">
+            <ScrollPane fx:id="studentDetailsPane" prefHeight="800.0">
                <content>
-                  <VBox fx:id="studentDetailsVBox" maxWidth="450.0" minWidth="450.0" prefWidth="450.0">
+                  <VBox fx:id="studentDetailsVBox">
                      <children>
-                        <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0" prefWidth="430.0">
+                        <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0" prefWidth="400.0">
                            <children>
                               <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Student Details" textAlignment="CENTER" wrapText="false">
                                  <textFill>
@@ -270,7 +270,7 @@
                                     <VBox prefWidth="100.0">
                                        <children>
                                           <ListView fx:id="adminRequiredModulesListView" prefWidth="200.0" />
-                                          <ButtonBar prefHeight="40.0" prefWidth="185.0">
+                                          <ButtonBar buttonMinWidth="0.0" prefHeight="40.0" prefWidth="185.0">
                                              <buttons>
                                                 <Button fx:id="requiredModulesEditButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
                                                    <font>
