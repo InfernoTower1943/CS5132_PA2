@@ -59,7 +59,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="studentModuleDetailsVBox" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Main">
+<VBox fx:id="studentModuleDetailsVBox" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Main">
   <children>
     <MenuBar prefWidth="911.0" VBox.vgrow="NEVER">
       <menus>
@@ -100,7 +100,7 @@
         </Menu>
       </menus>
     </MenuBar>
-    <SplitPane fx:id="mainSplitPane" dividerPositions="0.25, 0.5" focusTraversable="true" prefHeight="-1.0" prefWidth="150.0" VBox.vgrow="ALWAYS">
+    <SplitPane fx:id="mainSplitPane" dividerPositions="0.25" focusTraversable="true" prefHeight="-1.0" prefWidth="150.0" VBox.vgrow="ALWAYS">
       <items>
             <ScrollPane maxWidth="250.0" minWidth="250.0" prefHeight="800.0" prefWidth="250.0">
                <content>
@@ -122,12 +122,28 @@
                           <tabs>
                             <Tab text="Module List">
                                  <content>
-                                    <ListView fx:id="adminAllModulesListView" prefWidth="250.0" />
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                       <children>
+                                          <ScrollPane hbarPolicy="NEVER" prefHeight="0.0" prefWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <content>
+                                                <ListView fx:id="adminAllModulesListView" prefHeight="520.0" prefWidth="250.0" />
+                                             </content>
+                                          </ScrollPane>
+                                       </children>
+                                    </AnchorPane>
                                  </content>
                             </Tab>
                             <Tab text="Student List">
                                  <content>
-                                    <ListView fx:id="adminAllStudentsListView" prefHeight="618.0" prefWidth="243.0" />
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                       <children>
+                                          <ScrollPane hbarPolicy="NEVER" prefHeight="0.0" prefWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <content>
+                                                <ListView fx:id="adminAllStudentsListView" prefHeight="520.0" prefWidth="250.0" />
+                                             </content>
+                                          </ScrollPane>
+                                       </children>
+                                    </AnchorPane>
                                  </content></Tab>
                           </tabs>
                         </TabPane>
@@ -135,172 +151,195 @@
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets left="10.0" top="10.0" />
+                           </VBox.margin>
                         </Button>
                      </children>
                   </VBox>
                </content>
             </ScrollPane>
-        <ScrollPane prefWidth="-1.0">
-               <content>
-                  <VBox fx:id="moduleDetailsVBox">
+            <ScrollPane prefHeight="200.0" prefWidth="200.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="584.0" prefWidth="944.0">
                      <children>
-                        <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0" prefWidth="450.0">
+                        <VBox fx:id="moduleDetailsVBox" prefHeight="584.0" prefWidth="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0">
                            <children>
-                              <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Module Details" textAlignment="CENTER" wrapText="false">
-                                 <textFill>
-                                    <Color red="0.624" green="0.624" blue="0.624" fx:id="x22" />
-                                 </textFill>
+                              <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0">
+                                 <children>
+                                    <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Module Details" textAlignment="CENTER" wrapText="false">
+                                       <textFill>
+                                          <Color red="0.624" green="0.624" blue="0.624" fx:id="x22" />
+                                       </textFill>
+                                       <font>
+                                          <Font size="24.0" fx:id="x12" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <Label text="Select Time Slot">
                                  <font>
-                                    <Font size="24.0" fx:id="x12" />
+                                    <Font size="18.0" />
                                  </font>
                               </Label>
+                              <ComboBox fx:id="adminAvailableTimeSlotsComboBox" prefWidth="400.0" />
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="60.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="Module Title">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Module Code" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Total Spots" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="adminModuleTitleTextBox" editable="false" GridPane.columnIndex="1" />
+                                    <TextField fx:id="adminModuleCodeTextBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <TextField fx:id="adminTotalSpotsTextBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                 </children>
+                              </GridPane>
+                              <ButtonBar prefHeight="40.0" prefWidth="185.0">
+                                 <buttons>
+                                    <Button fx:id="timeSlotEditButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="timeSlotSaveButton" disable="true" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Button>
+                                 </buttons>
+                              </ButtonBar>
+                              <Separator prefWidth="200.0" />
+                              <ButtonBar prefHeight="40.0" prefWidth="185.0">
+                                <buttons>
+                                  <Button mnemonicParsing="false" style="-fx-background-color: #a0e698;" text="View Priority Queue" ButtonBar.buttonData="LEFT">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Button>
+                                    <Button maxWidth="100.0" mnemonicParsing="false" style="-fx-background-color: ff5459;" text="Delete" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Button>
+                                </buttons>
+                              </ButtonBar>
+                              <Separator prefHeight="39.0" prefWidth="181.0" />
+                              <Label text="Module Description">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextArea fx:id="moduleDescriptionTextBox" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
+                              <ButtonBar prefHeight="40.0" prefWidth="185.0">
+                                 <buttons>
+                                    <Button fx:id="descriptionEditButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="descriptionSaveButton" disable="true" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Button>
+                                 </buttons>
+                              </ButtonBar>
                            </children>
-                        </AnchorPane>
-                        <Label text="Select Time Slot">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="adminAvailableTimeSlotsComboBox" prefWidth="400.0" />
-                        <GridPane>
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="60.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
+                        </VBox>
+                        <VBox fx:id="studentDetailsVBox" prefHeight="0.0" prefWidth="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0">
                            <children>
-                              <Label text="Module Title">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label text="Module Code" GridPane.rowIndex="1">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label text="Total Spots" GridPane.rowIndex="2">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="adminModuleTitleTextBox" editable="false" GridPane.columnIndex="1" />
-                              <TextField fx:id="adminModuleCodeTextBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField fx:id="adminTotalSpotsTextBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0" prefWidth="430.0">
+                                 <children>
+                                    <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Student Details" textAlignment="CENTER" wrapText="false">
+                                       <textFill>
+                                          <Color red="0.624" green="0.624" blue="0.624" fx:id="x221" />
+                                       </textFill>
+                                       <font>
+                                          <Font size="24.0" fx:id="x121" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="0.0" prefWidth="200.0">
+                                 <children>
+                                    <TabPane prefWidth="0.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                      <tabs>
+                                        <Tab text="Required Modules">
+                                             <content>
+                                                <VBox prefWidth="100.0">
+                                                   <children>
+                                                      <ScrollPane prefHeight="464.0" prefWidth="924.0">
+                                                        <content>
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="464.0" prefWidth="908.0">
+                                                               <children>
+                                                                  <ListView fx:id="adminRequiredModulesListView" prefHeight="0.0" prefWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                               </children>
+                                                            </AnchorPane>
+                                                        </content>
+                                                      </ScrollPane>
+                                                      <ButtonBar prefHeight="40.0" prefWidth="185.0">
+                                                         <buttons>
+                                                            <Button fx:id="requiredModulesEditButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Button>
+                                                            <Button fx:id="requiredModulesSaveButton" disable="true" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
+                                                               <font>
+                                                                  <Font name="System Bold" size="18.0" />
+                                                               </font>
+                                                            </Button>
+                                                         </buttons>
+                                                         <VBox.margin>
+                                                            <Insets left="10.0" right="10.0" top="10.0" />
+                                                         </VBox.margin>
+                                                      </ButtonBar>
+                                                   </children>
+                                                </VBox>
+                                             </content>
+                                          </Tab>
+                                        <Tab text="Student's Module Preferences">
+                                             <content>
+                                                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                                                   <children>
+                                                      <ListView prefWidth="200.0" />
+                                                   </children>
+                                                </VBox>
+                                             </content>
+                                          </Tab>
+                                          <Tab text="Settings" />
+                                      </tabs>
+                                    </TabPane>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </AnchorPane>
                            </children>
-                        </GridPane>
-                        <ButtonBar prefHeight="40.0" prefWidth="185.0">
-                           <buttons>
-                              <Button fx:id="timeSlotEditButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Button>
-                              <Button fx:id="timeSlotSaveButton" disable="true" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Button>
-                           </buttons>
-                        </ButtonBar>
-                        <Separator prefWidth="200.0" />
-                        <ButtonBar prefHeight="40.0" prefWidth="185.0">
-                          <buttons>
-                            <Button mnemonicParsing="false" style="-fx-background-color: #a0e698;" text="View Priority Queue" ButtonBar.buttonData="LEFT">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Button>
-                              <Button maxWidth="100.0" mnemonicParsing="false" style="-fx-background-color: ff5459;" text="Delete" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Button>
-                          </buttons>
-                        </ButtonBar>
-                        <Separator prefHeight="39.0" prefWidth="181.0" />
-                        <Label text="Module Description">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <TextArea fx:id="moduleDescriptionTextBox" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
-                        <ButtonBar prefHeight="40.0" prefWidth="185.0">
-                           <buttons>
-                              <Button fx:id="descriptionEditButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Button>
-                              <Button fx:id="descriptionSaveButton" disable="true" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Button>
-                           </buttons>
-                        </ButtonBar>
+                        </VBox>
                      </children>
-                  </VBox>
-               </content>
-        </ScrollPane>
-            <ScrollPane maxWidth="450.0" minWidth="450.0" prefHeight="-1.0" prefWidth="450.0">
-               <content>
-                  <VBox fx:id="studentDetailsVBox" maxWidth="450.0" minWidth="450.0" prefWidth="450.0">
-                     <children>
-                        <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0" prefWidth="430.0">
-                           <children>
-                              <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Student Details" textAlignment="CENTER" wrapText="false">
-                                 <textFill>
-                                    <Color red="0.624" green="0.624" blue="0.624" fx:id="x221" />
-                                 </textFill>
-                                 <font>
-                                    <Font size="24.0" fx:id="x121" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </AnchorPane>
-                        <TabPane tabClosingPolicy="UNAVAILABLE">
-                          <tabs>
-                            <Tab text="Required Modules">
-                                 <content>
-                                    <VBox prefWidth="100.0">
-                                       <children>
-                                          <ListView fx:id="adminRequiredModulesListView" prefWidth="200.0" />
-                                          <ButtonBar prefHeight="40.0" prefWidth="185.0">
-                                             <buttons>
-                                                <Button fx:id="requiredModulesEditButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
-                                                   <font>
-                                                      <Font name="System Bold" size="18.0" />
-                                                   </font>
-                                                </Button>
-                                                <Button fx:id="requiredModulesSaveButton" disable="true" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Save" textFill="WHITE">
-                                                   <font>
-                                                      <Font name="System Bold" size="18.0" />
-                                                   </font>
-                                                </Button>
-                                             </buttons>
-                                          </ButtonBar>
-                                       </children>
-                                    </VBox>
-                                 </content></Tab>
-                            <Tab text="Student's Module Preferences">
-                                 <content>
-                                    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                       <children>
-                                          <ListView prefWidth="200.0" />
-                                       </children>
-                                    </VBox>
-                                 </content></Tab>
-                              <Tab text="Settings" />
-                          </tabs>
-                        </TabPane>
-                     </children>
-                  </VBox>
-               </content>
+                  </AnchorPane>
+              </content>
             </ScrollPane>
       </items>
     </SplitPane>

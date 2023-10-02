@@ -46,7 +46,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Main">
+<VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Main">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -91,7 +91,7 @@
          <children>
             <Label text="Module Registration System">
                <font>
-                  <Font size="24.0" />
+                  <Font name="Helvetica" size="24.0" />
                </font>
             </Label>
             <HBox alignment="CENTER" maxWidth="500.0" prefHeight="100.0" prefWidth="200.0">
