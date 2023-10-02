@@ -118,7 +118,7 @@
                               </Label>
                            </children>
                         </AnchorPane>
-                        <TabPane prefHeight="654.0" prefWidth="250.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane prefHeight="550.0" prefWidth="250.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Module List">
                                  <content>
