@@ -49,10 +49,11 @@ public class Admin extends Application{
     @FXML
     ScrollPane firstPane;
     @FXML
-    ScrollPane moduleDetailsPane;
+    VBox moduleDetailsPane;
     @FXML
-    ScrollPane studentDetailsPane;
-
+    VBox studentDetailsPane;
+    @FXML
+    TabPane adminModuleStudentTabPane;
 
     @FXML
     ListView adminAllModulesListView;
@@ -69,6 +70,10 @@ public class Admin extends Application{
     TextField adminTotalSpotsTextBox;
     @FXML
     TextArea moduleDescriptionTextBox;
+
+    @FXML
+    Label studentDetailsLabel;
+
     @FXML
     Button timeSlotEditButton;
     @FXML
@@ -139,8 +144,8 @@ public class Admin extends Application{
         mainSplitPane = (SplitPane) loader.getNamespace().get("mainSplitPane");
 
         firstPane = (ScrollPane) loader.getNamespace().get("firstPane");
-        moduleDetailsPane = (ScrollPane) loader.getNamespace().get("moduleDetailsPane");
-        studentDetailsPane = (ScrollPane) loader.getNamespace().get("studentDetailsPane");
+        moduleDetailsPane = (VBox) loader.getNamespace().get("moduleDetailsVBox");
+        studentDetailsPane = (VBox) loader.getNamespace().get("studentDetailsVBox");
 
 
         adminAllModulesListView = (ListView) loader.getNamespace().get("adminAllModulesListView");
@@ -150,10 +155,12 @@ public class Admin extends Application{
         adminAllStudentsListView = (ListView) loader.getNamespace().get("adminAllStudentsListView");
         adminAllStudentsListView.getItems().addAll(studentSet);
         adminRequiredModulesListView = (ListView) loader.getNamespace().get("adminRequiredModulesListView");
-
+        adminModuleStudentTabPane = (TabPane) loader.getNamespace().get("adminModuleStudentTabPane");
 
         adminModuleTitleTextBox = (TextField) loader.getNamespace().get("adminModuleTitleTextBox");
         adminModuleCodeTextBox = (TextField) loader.getNamespace().get("adminModuleCodeTextBox");
+        studentDetailsLabel = (Label) loader.getNamespace().get("studentDetailsLabel");
+
         // TODO: make total spots text box numeric only
         adminTotalSpotsTextBox = (TextField) loader.getNamespace().get("adminTotalSpotsTextBox");
         moduleDescriptionTextBox = (TextArea) loader.getNamespace().get("moduleDescriptionTextBox");
@@ -169,7 +176,7 @@ public class Admin extends Application{
                 (observable, oldValue, newValue) -> {
                     if (newValue != null) {
 
-                        // TODO: make student details VBox invisible and expand the module details VBox pane somehow
+                        // make student details VBox invisible and expand the module details VBox pane somehow
                         moduleDetailsPane.setVisible(true);
                         studentDetailsPane.setVisible(false);
                         mainSplitPane.setDividerPositions(0.25, 1);
@@ -192,13 +199,13 @@ public class Admin extends Application{
         adminAllStudentsListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (newValue != null) {
-
-                        // TODO: make modules details VBox invisible and expand the student details VBox pane somehow
+                        // make modules details VBox invisible and expand the student details VBox pane somehow
                         moduleDetailsPane.setVisible(false);
                         studentDetailsPane.setVisible(true);
                         mainSplitPane.setDividerPositions(0.25, 0.25);
 
                         String studentID = (String) newValue;
+                        studentDetailsLabel.setText("Student Details - "+studentID);
                         adminRequiredModulesListView.getItems().clear();
 
                         SortedSet<String> required = studentsRequiredModules.get(studentID);
@@ -216,6 +223,7 @@ public class Admin extends Application{
         timeSlotEditButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                adminModuleStudentTabPane.setDisable(true);
                 adminModuleTitleTextBox.setEditable(true);
                 adminModuleCodeTextBox.setEditable(true);
                 adminTotalSpotsTextBox.setEditable(true);
@@ -227,6 +235,7 @@ public class Admin extends Application{
         timeSlotSaveButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                adminModuleStudentTabPane.setDisable(false);
                 adminModuleTitleTextBox.setEditable(false);
                 adminModuleCodeTextBox.setEditable(false);
                 adminTotalSpotsTextBox.setEditable(false);
@@ -259,6 +268,7 @@ public class Admin extends Application{
         descriptionEditButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                adminModuleStudentTabPane.setDisable(true);
                 moduleDescriptionTextBox.setEditable(true);
                 descriptionEditButton.setDisable(true);
                 descriptionSaveButton.setDisable(false);
@@ -268,6 +278,7 @@ public class Admin extends Application{
         descriptionSaveButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                adminModuleStudentTabPane.setDisable(false);
                 moduleDescriptionTextBox.setEditable(false);
                 descriptionEditButton.setDisable(false);
                 descriptionSaveButton.setDisable(true);
@@ -314,7 +325,6 @@ public class Admin extends Application{
         primaryStage.setTitle("admin");
         primaryStage.setScene(scene);
         primaryStage.show();
-
 
     }
 

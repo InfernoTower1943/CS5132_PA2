@@ -118,7 +118,7 @@
                               </Label>
                            </children>
                         </AnchorPane>
-                        <TabPane prefHeight="550.0" prefWidth="250.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane fx:id="adminModuleStudentTabPane" prefHeight="550.0" prefWidth="250.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Module List">
                                  <content>
@@ -163,7 +163,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="584.0" prefWidth="944.0">
                      <children>
-                        <VBox fx:id="moduleDetailsVBox" prefHeight="584.0" prefWidth="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0">
+                        <VBox fx:id="moduleDetailsVBox" prefHeight="584.0" prefWidth="0.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0">
                            <children>
                               <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0">
                                  <children>
@@ -266,11 +266,11 @@
                               </ButtonBar>
                            </children>
                         </VBox>
-                        <VBox fx:id="studentDetailsVBox" prefHeight="0.0" prefWidth="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0">
+                        <VBox fx:id="studentDetailsVBox" prefHeight="0.0" prefWidth="0.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.0">
                            <children>
                               <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="50.0" prefWidth="430.0">
                                  <children>
-                                    <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Student Details" textAlignment="CENTER" wrapText="false">
+                                    <Label fx:id="studentDetailsLabel" alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Student Details" textAlignment="CENTER" wrapText="false">
                                        <textFill>
                                           <Color red="0.624" green="0.624" blue="0.624" fx:id="x221" />
                                        </textFill>
