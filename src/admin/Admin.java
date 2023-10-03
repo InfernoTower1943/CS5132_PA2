@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.*;
 
+import javafx.util.Pair;
 import main.Main;
 import main.ModulePriorityQueue;
 import student.Student;
@@ -29,10 +30,10 @@ public class Admin extends Application{
 
     public static main.ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<String, Integer>();
     public static SortedSet<String> moduleSet = new TreeSet<String>();
-    public static Map<String, String> moduleDetails = new HashMap<>();
+    public static Map<String, String> moduleTitles = new HashMap<>();
     public static Map<String, String> moduleDescriptions = new HashMap<>();
-    public static Map<String, Integer> timeVacancy= new HashMap<>();
-    public static Map<String, Integer> timeTotal= new HashMap<>();
+    public static Map<Pair<String, Integer>, Integer> timeVacancy= new HashMap<>();
+    public static Map<Pair<String, Integer>, Integer> timeTotal= new HashMap<>();
 
 
     public static SortedSet<String> studentSet = new TreeSet<String>();
@@ -106,8 +107,8 @@ public class Admin extends Application{
             String[] args = line.split(",");
             modulePQ.addTimeSlot(args[0], Integer.parseInt(args[1]), args[2]);
             moduleSet.add(args[0]);
-            timeVacancy.put(args[2],Integer.parseInt(args[3]));
-            timeTotal.put(args[2],Integer.parseInt(args[4].strip()));
+            timeVacancy.put(new Pair<>(args[0], Integer.parseInt(args[1])), Integer.parseInt(args[3]));
+            timeTotal.put(new Pair<>(args[0], Integer.parseInt(args[1])), Integer.parseInt(args[4].strip()));
         }
         scanner.close();
         scanner = new Scanner(new File("StudentLoginDetails.txt"));
@@ -123,7 +124,7 @@ public class Admin extends Application{
         while(scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] args = line.split(",", 3);
-            moduleDetails.put(args[0], args[1]);
+            moduleTitles.put(args[0], args[1]);
             moduleDescriptions.put(args[0], args[2]);
         }
         scanner.close();
@@ -187,12 +188,24 @@ public class Admin extends Application{
                         for (Integer timeSlotID : modulePQ.getTimeSlotIDs(selectedModule)){
                             adminAvailableTimeSlotsComboBox.getItems().add(modulePQ.getTimeSlot(selectedModule, timeSlotID));
                         }
-                        // set module title label
-                        adminModuleTitleTextBox.setText(moduleDetails.get(selectedModule));
-                        // set module code label
+                        // set module moduleTitle label
+                        adminModuleTitleTextBox.setText(moduleTitles.get(selectedModule));
+                        // set module moduleCode label
                         adminModuleCodeTextBox.setText(selectedModule);
-                        // set module description
+                        // set module timeSlotDescription
                         moduleDescriptionTextBox.setText(moduleDescriptions.get(selectedModule));
+                    }
+                });
+
+        adminAvailableTimeSlotsComboBox.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+
+                        String selectedTimeSlot = (String) newValue;
+                        // set time slot total spots
+                        /*adminTotalSpotsTextBox.setText(Integer.toString(timeTotal.get(
+                                new Pair<>(selectedModule, )
+                        )));*/
                     }
                 });
 
@@ -216,7 +229,6 @@ public class Admin extends Application{
                             }
                             adminRequiredModulesListView.getItems().add(cb);
                         }
-                        //adminRequiredModulesListView.getItems().addAll();
                     }
                 });
 
@@ -241,21 +253,26 @@ public class Admin extends Application{
                 adminTotalSpotsTextBox.setEditable(false);
                 timeSlotEditButton.setDisable(false);
                 timeSlotSaveButton.setDisable(true);
-                moduleDetails.remove(selectedModule);
-                String title=adminModuleTitleTextBox.getText();
-                String code=adminModuleCodeTextBox.getText();
-                moduleDetails.put(code,title);
-                moduleDescriptions.put(code,moduleDescriptions.get(selectedModule));
+                moduleTitles.remove(selectedModule);
+
+                String moduleTitle = adminModuleTitleTextBox.getText();
+                String moduleCode = adminModuleCodeTextBox.getText();
+                Integer totalSpots = Integer.parseInt(adminTotalSpotsTextBox.getText());
+
+                moduleTitles.put(moduleCode,moduleTitle);
+                moduleDescriptions.put(moduleCode,moduleDescriptions.get(selectedModule));
                 moduleDescriptions.remove(selectedModule);
                 moduleSet.remove(selectedModule);
-                moduleSet.add(code);
+                moduleSet.add(moduleCode);
+
                 adminAllModulesListView.getItems().clear();
                 adminAllModulesListView.getItems().addAll(moduleSet);
-                ArrayList<Integer> list =new ArrayList<>(modulePQ.getTimeSlotIDs(selectedModule));
-                for (int num:list){
-                    String description=modulePQ.getTimeSlot(selectedModule,num);
-                    modulePQ.deleteTimeSlot(selectedModule,num);
-                    modulePQ.addTimeSlot(code,num,description);
+
+                ArrayList<Integer> selectedModuleAllTimeSlots =new ArrayList<>(modulePQ.getTimeSlotIDs(selectedModule));
+                for (int timeSlotID : selectedModuleAllTimeSlots){
+                    String timeSlotDescription=modulePQ.getTimeSlot(selectedModule,timeSlotID);
+                    modulePQ.deleteTimeSlot(selectedModule,timeSlotID);
+                    modulePQ.addTimeSlot(moduleCode,timeSlotID,timeSlotDescription);
                 }
                 try {
                     write();
@@ -282,8 +299,8 @@ public class Admin extends Application{
                 moduleDescriptionTextBox.setEditable(false);
                 descriptionEditButton.setDisable(false);
                 descriptionSaveButton.setDisable(true);
-                String description=moduleDescriptionTextBox.getText();
-                moduleDescriptions.put(selectedModule,description);
+                String timeSlotDescription=moduleDescriptionTextBox.getText();
+                moduleDescriptions.put(selectedModule,timeSlotDescription);
                 try {
                     write();
                 } catch (IOException e) {
@@ -331,12 +348,14 @@ public class Admin extends Application{
     private static void write() throws IOException {
         FileWriter outputStream = new FileWriter("ModuleDetails.txt");
         FileWriter outputStream1 = new FileWriter("ModulesAndTimeSlots.txt");
-        for (String string:moduleSet) {
-            outputStream.write(string + "," + moduleDetails.get(string) + "," + moduleDescriptions.get(string)+"\n");
-            ArrayList<Integer> list = new ArrayList<>(modulePQ.getTimeSlotIDs(string));
-            for (int num : list) {
-                String description = modulePQ.getTimeSlot(string, num);
-                outputStream1.write(string+","+num+","+description+","+timeVacancy.get(description)+','+timeTotal.get(description)+"\n");
+        for (String moduleCode : moduleSet) {
+            outputStream.write(moduleCode + "," + moduleTitles.get(moduleCode) + "," + moduleDescriptions.get(moduleCode)+"\n");
+            ArrayList<Integer> currentModuleAllTimeSlots = new ArrayList<>(modulePQ.getTimeSlotIDs(moduleCode));
+            for (int timeSlotID : currentModuleAllTimeSlots) {
+                String timeSlotDescription = modulePQ.getTimeSlot(moduleCode, timeSlotID);
+                outputStream1.write(moduleCode+","+timeSlotID+","+timeSlotDescription+","
+                        +timeVacancy.get(new Pair<>(moduleCode, timeSlotID)) + ','
+                        +timeTotal.get(new Pair<>(moduleCode, timeSlotID)) + "\n");
             }
         }
         outputStream.close();
