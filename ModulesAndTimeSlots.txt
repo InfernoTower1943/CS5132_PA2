@@ -1,4 +1,4 @@
-CS2100,0,Monday 9am-10am,1,21
+CS2100,0,Monday 9am-10am,1,69
 CS2100,1,Monday 10am-11am,2,22
 CS2100,2,Monday 11am-12pm,3,23
 CS2100,3,Monday 12pm-1pm,4,24

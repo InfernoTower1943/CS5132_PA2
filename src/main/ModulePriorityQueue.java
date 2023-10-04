@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 public class ModulePriorityQueue<T, S extends Comparable<S>> {
-    Map<Pair<String, Integer>, PriorityQueue<T, S>> modulePQMap;
-    Map<Pair<String, Integer>, String> timeSlotDescriptionMap;
-    Map<String, ArrayList<Integer>> moduleTimeSlotsMap;
+    public Map<Pair<String, Integer>, PriorityQueue<T, S>> modulePQMap;
+    public Map<Pair<String, Integer>, String> timeSlotDescriptionMap;
+    public Map<String, ArrayList<Integer>> moduleTimeSlotsMap;
 
     public ModulePriorityQueue() {
         modulePQMap = new HashMap<>();

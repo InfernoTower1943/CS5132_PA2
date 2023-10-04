@@ -1,2 +1,2 @@
-CS2100,Computer Organisation,The objective of this course is to familiarise students with the fundamentals of computing devices. Through this course students will understand the basics of data representation, and how the various parts of a computer work, separately and with each other. This allows students to understand the issues in computing devices, and how these issues affect the implementation of solutions.
+CS2100,Computer Organisation,222222222222222
 ME2100,Methamphetamine Studies 2,Explain why Jingliu is made out of Hydrogen Peroxide
