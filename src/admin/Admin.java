@@ -30,7 +30,7 @@ public class Admin extends Application{
     public static Map<String, String> moduleDescriptions = new HashMap<>();
     public static Map<Pair<String, String>, Integer> timeVacancy= new HashMap<>();
     public static Map<Pair<String, String>, Integer> timeTotal= new HashMap<>();
-
+    public static String studentID;
 
     public static SortedSet<String> studentSet = new TreeSet<String>();
     public static Map<String, SortedSet<String>> studentsRequiredModules = new HashMap<>();
@@ -217,7 +217,7 @@ public class Admin extends Application{
                         studentDetailsPane.setVisible(true);
                         mainSplitPane.setDividerPositions(0.25, 0.25);
 
-                        String studentID = (String) newValue;
+                        studentID = (String) newValue;
                         studentDetailsLabel.setText("Student Details - "+studentID);
                         adminRequiredModulesListView.getItems().clear();
 
@@ -229,6 +229,9 @@ public class Admin extends Application{
                             }
                             adminRequiredModulesListView.getItems().add(cb);
                         }
+                        adminRequiredModulesListView.setDisable(true);
+                        requiredModulesSaveButton.setDisable(true);
+                        requiredModulesEditButton.setDisable(false);
                     }
                 });
 
@@ -337,6 +340,19 @@ public class Admin extends Application{
 
                 requiredModulesEditButton.setDisable(false);
                 requiredModulesSaveButton.setDisable(true);
+                SortedSet<String> required = new TreeSet<String>();
+                for (Object object : adminRequiredModulesListView.getItems()){
+                    CheckBox cb = (CheckBox) object;
+                    if (cb.isSelected()){
+                        required.add(cb.getText());
+                    }
+                }
+                studentsRequiredModules.put(studentID,required);
+                try {
+                    write();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -360,6 +376,7 @@ public class Admin extends Application{
     private static void write() throws IOException {
         FileWriter outputStream = new FileWriter("ModuleDetails.txt");
         FileWriter outputStream1 = new FileWriter("ModulesAndTimeSlots.txt");
+        FileWriter outputStream2 = new FileWriter("StudentRequiredModules.txt");
         for (String moduleCode : moduleSet) {
             outputStream.write(moduleCode + "," + moduleTitles.get(moduleCode) + "," + moduleDescriptions.get(moduleCode)+"\n");
             ArrayList<Integer> currentModuleAllTimeSlots = new ArrayList<>(modulePQ.getTimeSlotIDs(moduleCode));
@@ -370,7 +387,15 @@ public class Admin extends Application{
                         +timeTotal.get(new Pair<>(moduleCode, timeSlotDescription)) + "\n");
             }
         }
+        for (String student:studentSet){
+            outputStream2.write(student);
+            for (String module:studentsRequiredModules.get(student)){
+                outputStream2.write(","+module);
+            }
+            outputStream2.write("\n");
+        }
         outputStream.close();
         outputStream1.close();
+        outputStream2.close();
     }
 }
