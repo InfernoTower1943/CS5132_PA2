@@ -108,7 +108,8 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
         }
     }
 
-    long getPriority(boolean isRequired, int preference, long time){
+    public long getPriority(boolean isRequired, int preference, long time){
         return (isRequired?1:0)*(long)Math.pow(10,12) + preference*(long)Math.pow(10,10)+time;
     }
+
 }
