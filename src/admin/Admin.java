@@ -30,7 +30,7 @@ public class Admin extends Application{
     public static Map<String, String> moduleDescriptions = new HashMap<>();
     public static Map<Pair<String, String>, Long> timeVacancy= new HashMap<>();
     public static Map<Pair<String, String>, Long> timeTotal= new HashMap<>();
-
+    public static String studentID;
 
     public static SortedSet<String> studentSet = new TreeSet<String>();
     public static Map<String, SortedSet<String>> studentsRequiredModules = new HashMap<>();
@@ -280,7 +280,7 @@ public class Admin extends Application{
                 adminAllModulesListView.getItems().clear();
                 adminAllModulesListView.getItems().addAll(moduleSet);
 
-                ArrayList<Long> selectedModuleAllTimeSlots = new ArrayList<>(modulePQ.getTimeSlotIDs(selectedModule));
+                ArrayList<Long> selectedModuleAllTimeSlots =new ArrayList<>(modulePQ.getTimeSlotIDs(selectedModule));
                 for (long timeSlotID : selectedModuleAllTimeSlots){
                     String timeSlotDescription=modulePQ.getTimeSlot(selectedModule,timeSlotID);
                     modulePQ.deleteTimeSlot(selectedModule,timeSlotID);

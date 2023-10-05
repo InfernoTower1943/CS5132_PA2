@@ -119,7 +119,7 @@ public class Student extends Application{
         studentModulesAvailableListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (newValue != null) {
-                        System.out.println("Selected Item: " + newValue);
+                        //System.out.println("Selected Item: " + newValue);
                         // Update choice box
                         String moduleCode = (String) newValue;
                         studentAvailableTimeSlotsComboBox.getItems().clear();
@@ -139,7 +139,7 @@ public class Student extends Application{
                 (observable, oldValue, newValue) -> {
                     if (newValue != null && !studentAvailableTimeSlotsComboBox.getSelectionModel().isEmpty()) {
                         Pair<String, Long> timeSlot = modulePQ.getTimeSlotIDFromStr((String) (studentAvailableTimeSlotsComboBox.getItems().get((Integer) newValue)));
-                        System.out.println("Selected Time Slot: " + timeSlot.toString());
+                        //System.out.println("Selected Time Slot: " + timeSlot.toString());
                     }
                     // TODO: set vacancies label
                 }
