@@ -22,7 +22,7 @@ import main.ModulePriorityQueue;
 public class Student extends Application{
     private Stage globalStage;
 
-    public static main.ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<String, Integer>();
+    public static main.ModulePriorityQueue<String, Long> modulePQ = new ModulePriorityQueue<String, Long>();
     public static SortedSet<String> moduleSet = new TreeSet<String>();
     public static Map<String, String> moduleDetails = new HashMap<>();
     public static Map<String, String> moduleDescriptions = new HashMap<>();
@@ -73,7 +73,7 @@ public class Student extends Application{
         while(scanner.hasNext()){
             String line = scanner.next();
             String[] args = line.split(",");
-            modulePQ.addTimeSlot(args[0], Integer.parseInt(args[1]), args[2]);
+            modulePQ.addTimeSlot(args[0], Long.parseLong(args[1]), args[2]);
             moduleSet.add(args[0]);
         }
         scanner.close();
@@ -123,7 +123,7 @@ public class Student extends Application{
                         // Update choice box
                         String moduleCode = (String) newValue;
                         studentAvailableTimeSlotsComboBox.getItems().clear();
-                        for (Integer timeSlotID : modulePQ.getTimeSlotIDs(moduleCode)){
+                        for (Long timeSlotID : modulePQ.getTimeSlotIDs(moduleCode)){
                             studentAvailableTimeSlotsComboBox.getItems().add(modulePQ.getTimeSlot(moduleCode, timeSlotID));
                         }
                         // set module title label
@@ -137,8 +137,10 @@ public class Student extends Application{
 
         studentAvailableTimeSlotsComboBox.getSelectionModel().selectedIndexProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    Pair<String, Integer> timeSlot = modulePQ.getTimeSlotIDFromStr((String)(studentAvailableTimeSlotsComboBox.getItems().get((Integer) newValue)));
-                    System.out.println("Selected Time Slot: " +  timeSlot.toString());
+                    if (newValue != null && !studentAvailableTimeSlotsComboBox.getSelectionModel().isEmpty()) {
+                        Pair<String, Long> timeSlot = modulePQ.getTimeSlotIDFromStr((String) (studentAvailableTimeSlotsComboBox.getItems().get((Integer) newValue)));
+                        System.out.println("Selected Time Slot: " + timeSlot.toString());
+                    }
                     // TODO: set vacancies label
                 }
         );
@@ -160,7 +162,6 @@ public class Student extends Application{
                 }
             }
         });
-
 
         primaryStage.setTitle("student");
         primaryStage.setScene(scene);

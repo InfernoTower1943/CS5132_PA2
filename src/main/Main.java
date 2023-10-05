@@ -27,7 +27,7 @@ public class Main extends Application {
     }
 
     // Initialisation of Priority Queue and Module List
-    public static ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<String, Integer>();
+    public static ModulePriorityQueue<String, Long> modulePQ = new ModulePriorityQueue<String, Long>();
     public static SortedSet<String> moduleSet = new TreeSet<String>();
     public static Map<String, String> studentsLogin = new HashMap<>();
     public static Map<String, String> adminsLogin = new HashMap<>();
@@ -54,7 +54,7 @@ public class Main extends Application {
         while(scanner.hasNextLine()){
             String line = scanner.nextLine();
             String[] args = line.split(",");
-            modulePQ.addTimeSlot(args[0], Integer.parseInt(args[1]), args[2]);
+            modulePQ.addTimeSlot(args[0], Long.parseLong(args[1]), args[2]);
             moduleSet.add(args[0]);
         }
         scanner.close();
