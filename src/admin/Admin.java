@@ -24,17 +24,17 @@ import main.ModulePriorityQueue;
 public class Admin extends Application{
     private Stage globalStage;
 
-    public static main.ModulePriorityQueue<String, Long> modulePQ = new ModulePriorityQueue<String, Long>();
+    public static main.ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<String, Integer>();
     public static SortedSet<String> moduleSet = new TreeSet<String>();
     public static Map<String, String> moduleTitles = new HashMap<>();
     public static Map<String, String> moduleDescriptions = new HashMap<>();
-    public static Map<Pair<String, String>, Long> timeVacancy= new HashMap<>();
-    public static Map<Pair<String, String>, Long> timeTotal= new HashMap<>();
-    public static String studentID;
+    public static Map<Pair<String, String>, Integer> timeVacancy= new HashMap<>();
+    public static Map<Pair<String, String>, Integer> timeTotal= new HashMap<>();
 
     public static SortedSet<String> studentSet = new TreeSet<String>();
     public static Map<String, SortedSet<String>> studentsRequiredModules = new HashMap<>();
     public static String selectedModule = "";
+    public static String selectedStudent = "";
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -101,14 +101,14 @@ public class Admin extends Application{
         while(scanner.hasNext()){
             String line = scanner.next();
             String[] args = line.split(",");
-            modulePQ.addTimeSlot(args[0], Long.parseLong(args[1]), args[2]);
+            modulePQ.addTimeSlot(args[0], Integer.parseInt(args[1]), args[2]);
             moduleSet.add(args[0]);
             timeVacancy.put(new Pair<String, String>(args[0],
-                    modulePQ.timeSlotDescriptionMap.get(new Pair<>(args[0], Long.parseLong(args[1])))),
-                    Long.parseLong(args[3].strip()));
+                    modulePQ.timeSlotDescriptionMap.get(new Pair<>(args[0], Integer.parseInt(args[1])))),
+                    Integer.parseInt(args[3].strip()));
             timeTotal.put(new Pair<String, String>(args[0],
-                    modulePQ.timeSlotDescriptionMap.get(new Pair<>(args[0], Long.parseLong(args[1])))),
-                    Long.parseLong(args[4].strip()));
+                    modulePQ.timeSlotDescriptionMap.get(new Pair<>(args[0], Integer.parseInt(args[1])))),
+                    Integer.parseInt(args[4].strip()));
         }
         scanner.close();
         scanner = new Scanner(new File("StudentLoginDetails.txt"));
@@ -138,22 +138,6 @@ public class Admin extends Application{
             }
             for (int i=1; i<args.length; i++) {
                 studentsRequiredModules.get(args[0]).add(args[i]);
-            }
-        }
-        scanner.close();
-
-        scanner = new Scanner(new File("ModulePriorityQueue.txt"));
-        scanner.useDelimiter("\n");
-        while(scanner.hasNext()){
-            String line = scanner.next();
-            String[] args = line.split(",");
-            String module=args[0];
-            long timeSlotID=Long.parseLong(args[1].strip());
-            long count=Long.parseLong(args[2].strip());
-            for (int i=0; i<count;i++){
-                line = scanner.next();
-                args = line.split(",");
-                modulePQ.enqueueToTimeSlot(module,timeSlotID,args[0],Long.parseLong(args[1].strip()));
             }
         }
         scanner.close();
@@ -201,7 +185,7 @@ public class Admin extends Application{
                         // Update choice box
                         selectedModule = (String) newValue;
                         adminAvailableTimeSlotsComboBox.getItems().clear();
-                        for (Long timeSlotID : modulePQ.getTimeSlotIDs(selectedModule)){
+                        for (Integer timeSlotID : modulePQ.getTimeSlotIDs(selectedModule)){
                             adminAvailableTimeSlotsComboBox.getItems().add(modulePQ.getTimeSlot(selectedModule, timeSlotID));
                         }
                         // set module moduleTitle label
@@ -220,7 +204,7 @@ public class Admin extends Application{
                     if (newValue != null) {
 
                         String selectedTimeSlot = (String) newValue;
-                        adminTotalSpotsTextBox.setText(Long.toString(timeTotal.get(
+                        adminTotalSpotsTextBox.setText(Integer.toString(timeTotal.get(
                                 new Pair<>(selectedModule, selectedTimeSlot))));
                     }
                 });
@@ -234,6 +218,7 @@ public class Admin extends Application{
                         mainSplitPane.setDividerPositions(0.25, 0.25);
 
                         String studentID = (String) newValue;
+                        selectedStudent = studentID;
                         studentDetailsLabel.setText("Student Details - "+studentID);
                         adminRequiredModulesListView.getItems().clear();
 
@@ -274,9 +259,9 @@ public class Admin extends Application{
                 String moduleTitle = adminModuleTitleTextBox.getText();
                 String moduleCode = adminModuleCodeTextBox.getText();
                 String selectedTimeSlot = adminAvailableTimeSlotsComboBox.getValue().toString();
-                Long totalSpots = Long.valueOf(-1);
+                Integer totalSpots = Integer.valueOf(-1);
                 try {
-                    totalSpots = Long.parseLong(adminTotalSpotsTextBox.getText());
+                    totalSpots = Integer.parseInt(adminTotalSpotsTextBox.getText());
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     System.out.println(e);
@@ -296,8 +281,8 @@ public class Admin extends Application{
                 adminAllModulesListView.getItems().clear();
                 adminAllModulesListView.getItems().addAll(moduleSet);
 
-                ArrayList<Long> selectedModuleAllTimeSlots =new ArrayList<>(modulePQ.getTimeSlotIDs(selectedModule));
-                for (long timeSlotID : selectedModuleAllTimeSlots){
+                ArrayList<Integer> selectedModuleAllTimeSlots =new ArrayList<>(modulePQ.getTimeSlotIDs(selectedModule));
+                for (Integer timeSlotID : selectedModuleAllTimeSlots){
                     String timeSlotDescription=modulePQ.getTimeSlot(selectedModule,timeSlotID);
                     modulePQ.deleteTimeSlot(selectedModule,timeSlotID);
                     modulePQ.addTimeSlot(moduleCode,timeSlotID,timeSlotDescription);
@@ -350,9 +335,10 @@ public class Admin extends Application{
             @Override
             public void handle(ActionEvent actionEvent) {
                 adminRequiredModulesListView.setDisable(true);
-
                 requiredModulesEditButton.setDisable(false);
                 requiredModulesSaveButton.setDisable(true);
+
+                //studentsRequiredModules.get(selectedStudent).add(args[i]);
             }
         });
 
@@ -376,23 +362,10 @@ public class Admin extends Application{
     private static void write() throws IOException {
         FileWriter outputStream = new FileWriter("ModuleDetails.txt");
         FileWriter outputStream1 = new FileWriter("ModulesAndTimeSlots.txt");
-        FileWriter outputStream2 = new FileWriter("ModulePriorityQueue.txt");
         for (String moduleCode : moduleSet) {
             outputStream.write(moduleCode + "," + moduleTitles.get(moduleCode) + "," + moduleDescriptions.get(moduleCode)+"\n");
-            ArrayList<Long> currentModuleAllTimeSlots = new ArrayList<>(modulePQ.getTimeSlotIDs(moduleCode));
-            for (long timeSlotID : currentModuleAllTimeSlots) {
-                if (!modulePQ.PQIsEmpty(modulePQ.getTimeSlotPQ(moduleCode,timeSlotID))){
-                    outputStream2.write(moduleCode + "," + timeSlotID + "," + modulePQ.PQLength(modulePQ.getTimeSlotPQ(moduleCode,timeSlotID))+"\n");
-                }
-                ArrayList<Pair<String,Long>> arrayList=new ArrayList<>();
-                while (!modulePQ.PQIsEmpty(modulePQ.getTimeSlotPQ(moduleCode,timeSlotID))){
-                    Pair<String, Long> pair=modulePQ.dequeueFromTimeSlot(moduleCode,timeSlotID);
-                    outputStream2.write(pair.getKey() + "," + pair.getValue() +"\n");
-                    arrayList.add(pair);
-                }
-                for (Pair<String,Long> pair: arrayList){
-                    modulePQ.enqueueToTimeSlot(moduleCode,timeSlotID,pair.getKey(),pair.getValue());
-                }
+            ArrayList<Integer> currentModuleAllTimeSlots = new ArrayList<>(modulePQ.getTimeSlotIDs(moduleCode));
+            for (Integer timeSlotID : currentModuleAllTimeSlots) {
                 String timeSlotDescription = modulePQ.getTimeSlot(moduleCode, timeSlotID);
                 outputStream1.write(moduleCode+","+timeSlotID+","+timeSlotDescription+","
                         +timeVacancy.get(new Pair<>(moduleCode, timeSlotDescription)) + ','
@@ -401,6 +374,5 @@ public class Admin extends Application{
         }
         outputStream.close();
         outputStream1.close();
-        outputStream2.close();
     }
 }

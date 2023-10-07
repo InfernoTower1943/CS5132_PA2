@@ -13,8 +13,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 
@@ -25,17 +23,19 @@ import main.ModulePriorityQueue;
 public class Student extends Application{
     private Stage globalStage;
 
-    public static main.ModulePriorityQueue<String, Long> modulePQ = new ModulePriorityQueue<String, Long>();
+    public static main.ModulePriorityQueue<String, Integer> modulePQ = new ModulePriorityQueue<String, Integer>();
     public static SortedSet<String> moduleSet = new TreeSet<String>();
     public static Map<String, String> moduleDetails = new HashMap<>();
     public static Map<String, String> moduleDescriptions = new HashMap<>();
     public static SortedSet<String> studentsRequiredModules = new TreeSet<String>();
-    public static Map<Pair<String, String>, Long> timeVacancy= new HashMap<>();
-    public static Map<Pair<String, String>, Long> timeTotal= new HashMap<>();
+    public static Map<Pair<String, String>, Integer> timeVacancy= new HashMap<>();
+    public static Map<Pair<String, String>, Integer> timeTotal= new HashMap<>();
     public static String studentID;
     public static String currentModuleCode;
     public static String currentTimeSlot;
-    public static Long currentTimeSlotID;
+    public static Integer currentTimeSlotID;
+    public static boolean required;
+    public static int preference;
 
 
     public static void main(String[] args) {
@@ -50,6 +50,10 @@ public class Student extends Application{
 
     @FXML
     ComboBox studentAvailableTimeSlotsComboBox;
+    @FXML
+    Label studentPreferenceLabel;
+    @FXML
+    ComboBox studentPreferenceComboBox;
 
     @FXML
     Label studentModuleTitleLabel;
@@ -65,8 +69,7 @@ public class Student extends Application{
     Button logoutButton;
     @FXML
     Button signUpButton;
-    @FXML
-    Button studentSignUpCancelButton;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -81,15 +84,15 @@ public class Student extends Application{
         while(scanner.hasNext()){
             String line = scanner.next();
             String[] args = line.split(",");
-            modulePQ.addTimeSlot(args[0], Long.parseLong(args[1]), args[2]);
+            modulePQ.addTimeSlot(args[0], Integer.parseInt(args[1]), args[2]);
             moduleSet.add(args[0]);
             timeVacancy.put(new Pair<String, String>(args[0],
-                            modulePQ.timeSlotDescriptionMap.get(new Pair<>(args[0], Long.parseLong(args[1])))),
-                    Long.parseLong(args[3].strip()));
+                            modulePQ.timeSlotDescriptionMap.get(new Pair<>(args[0], Integer.parseInt(args[1])))),
+                    Integer.parseInt(args[3].strip()));
             timeTotal.put(new Pair<String, String>(args[0],
-                            modulePQ.timeSlotDescriptionMap.get(new Pair<>(args[0], Long.parseLong(args[1])))),
-                    Long.parseLong(args[4].strip()));
-            System.out.println(timeVacancy.get(new Pair<>(args[0], modulePQ.timeSlotDescriptionMap.get(new Pair<>(args[0], Long.parseLong(args[1]))))));
+                            modulePQ.timeSlotDescriptionMap.get(new Pair<>(args[0], Integer.parseInt(args[1])))),
+                    Integer.parseInt(args[4].strip()));
+            System.out.println(timeVacancy.get(new Pair<>(args[0], modulePQ.timeSlotDescriptionMap.get(new Pair<>(args[0], Integer.parseInt(args[1]))))));
 
         }
         scanner.close();
@@ -118,25 +121,12 @@ public class Student extends Application{
         }
         scanner.close();
 
-        scanner = new Scanner(new File("ModulePriorityQueue.txt"));
-        scanner.useDelimiter("\n");
-        while(scanner.hasNext()){
-            String line = scanner.next();
-            String[] args = line.split(",");
-            String module=args[0];
-            long timeSlotID=Long.parseLong(args[1].strip());
-            long count=Long.parseLong(args[2].strip());
-            for (int i=0; i<count;i++){
-                line = scanner.next();
-                args = line.split(",");
-                modulePQ.enqueueToTimeSlot(module,timeSlotID,args[0],Long.parseLong(args[1].strip()));
-            }
-        }
-        scanner.close();
         ListView studentModulesAvailableListView = (ListView) loader.getNamespace().get("studentModulesAvailableListView");
         studentModulesAvailableListView.getItems().addAll(moduleSet);
 
         studentAvailableTimeSlotsComboBox = (ComboBox) loader.getNamespace().get("studentAvailableTimeSlotsComboBox");
+        studentPreferenceLabel = (Label) loader.getNamespace().get("studentPreferenceLabel");
+        studentPreferenceComboBox = (ComboBox) loader.getNamespace().get("studentPreferenceComboBox");
 
         studentModuleTitleLabel = (Label) loader.getNamespace().get("studentModuleTitleLabel");
         studentModuleCodeLabel = (Label) loader.getNamespace().get("studentModuleCodeLabel");
@@ -145,10 +135,10 @@ public class Student extends Application{
         studentRequiredModulesListView = (ListView) loader.getNamespace().get("studentRequiredModulesListView");
         logoutButton = (Button) loader.getNamespace().get("logoutButton");
         signUpButton = (Button) loader.getNamespace().get("signUpButton");
-        studentSignUpCancelButton = (Button) loader.getNamespace().get("studentSignUpCancelButton");
 
         signUpButton.setDisable(true);
-        studentSignUpCancelButton.setDisable(true);
+        // TODO: If have previously stored data, load it and prevent user from editing.
+
         studentModulesAvailableListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (newValue != null) {
@@ -156,7 +146,7 @@ public class Student extends Application{
                         // Update choice box
                         String moduleCode = (String) newValue;
                         studentAvailableTimeSlotsComboBox.getItems().clear();
-                        for (Long timeSlotID : modulePQ.getTimeSlotIDs(moduleCode)){
+                        for (Integer timeSlotID : modulePQ.getTimeSlotIDs(moduleCode)){
                             studentAvailableTimeSlotsComboBox.getItems().add(modulePQ.getTimeSlot(moduleCode, timeSlotID));
                         }
                         // set module title label
@@ -166,16 +156,31 @@ public class Student extends Application{
                         studentModuleCodeLabel.setText(moduleCode);
                         // set module description
                         moduleDescriptionTextBox.setText(moduleDescriptions.get(moduleCode));
+                        required = studentsRequiredModules.contains(currentModuleCode);
                     }
                 });
+
+        if (required){
+            preference = 100;
+            studentPreferenceLabel.setVisible(false);
+            studentPreferenceComboBox.setVisible(false);
+        } else {
+            preference = 0;
+            studentPreferenceLabel.setVisible(true);
+            studentPreferenceComboBox.setVisible(true);
+        }
+
+        // TODO: Based on available preferences, load the data for studentPreferenceComboBox
 
         studentAvailableTimeSlotsComboBox.getSelectionModel().selectedIndexProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (newValue != null && !studentAvailableTimeSlotsComboBox.getSelectionModel().isEmpty()) {
-                        Pair<String, Long> timeSlot = modulePQ.getTimeSlotIDFromStr((String) (studentAvailableTimeSlotsComboBox.getItems().get((Integer) newValue)));
+                        Pair<String, Integer> timeSlot = modulePQ.getTimeSlotIDFromStr((String) (studentAvailableTimeSlotsComboBox.getItems().get((Integer) newValue)));
                         currentTimeSlot=timeSlot.getKey();
                         currentTimeSlotID=timeSlot.getValue();
-                        studentVacanciesLabel.setText(timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))))+"");
+                        int vacancyNumber = timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))));
+                        if (vacancyNumber <= 0) studentVacanciesLabel.setText("Full!");
+                        else studentVacanciesLabel.setText("Available");
                         signUpButton.setDisable(false);
                         //System.out.println("Selected Time Slot: " + timeSlot.toString());
                     }
@@ -185,23 +190,8 @@ public class Student extends Application{
         signUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                modulePQ.enqueueToTimeSlot(currentModuleCode,currentTimeSlotID,studentID,modulePQ.getPriority(studentsRequiredModules.contains(currentModuleCode),1,Instant.now().toEpochMilli()));
-                try {
-                    write();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                modulePQ.enqueueToTimeSlot(currentModuleCode,currentTimeSlotID,studentID,modulePQ.getPriority(preference, timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))))));//studentsRequiredModules.contains(currentModuleCode),1,Instant.now().toEpochMilli()));
                 signUpButton.setDisable(true);
-                studentSignUpCancelButton.setDisable(false);
-            }
-        });
-
-        studentSignUpCancelButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                // TODO: Remove them from queue
-                studentSignUpCancelButton.setDisable(true);
-                signUpButton.setDisable(false);
             }
         });
 
@@ -220,27 +210,6 @@ public class Student extends Application{
         primaryStage.setScene(scene);
         primaryStage.show();
 
-
     }
 
-    private static void write() throws IOException {
-        FileWriter outputStream = new FileWriter("ModulePriorityQueue.txt");
-        for (String moduleCode : moduleSet) {
-            for (Long id:modulePQ.getTimeSlotIDs(moduleCode)){
-                if (!modulePQ.PQIsEmpty(modulePQ.getTimeSlotPQ(moduleCode,id))){
-                    outputStream.write(moduleCode + "," + id + "," + modulePQ.PQLength(modulePQ.getTimeSlotPQ(moduleCode,id))+"\n");
-                }
-                ArrayList<Pair<String,Long>> arrayList=new ArrayList<>();
-                while (!modulePQ.PQIsEmpty(modulePQ.getTimeSlotPQ(moduleCode,id))){
-                    Pair<String, Long> pair=modulePQ.dequeueFromTimeSlot(moduleCode,id);
-                    outputStream.write(pair.getKey() + "," + pair.getValue() +"\n");
-                    arrayList.add(pair);
-                }
-                for (Pair<String,Long> pair: arrayList){
-                    modulePQ.enqueueToTimeSlot(moduleCode,id,pair.getKey(),pair.getValue());
-                }
-            }
-        }
-        outputStream.close();
-    }
 }

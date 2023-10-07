@@ -149,6 +149,12 @@
                            </font>
                         </Label>
                         <ComboBox fx:id="studentAvailableTimeSlotsComboBox" prefWidth="400.0" />
+                        <Label fx:id="studentPreferenceLabel" text="My Preferences:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="studentPreferenceComboBox" prefWidth="150.0" />
                         <GridPane>
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0" />
@@ -170,7 +176,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label text="Vacancies" GridPane.rowIndex="2">
+                              <Label text="Available" GridPane.rowIndex="2">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -200,11 +206,6 @@
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="studentSignUpCancelButton" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: ff5459;" text="Cancel" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Button>
                           </buttons>
                         </ButtonBar>
                         <Separator prefHeight="39.0" prefWidth="181.0" />
@@ -214,11 +215,6 @@
                            </font>
                         </Label>
                         <TextArea fx:id="moduleDescriptionTextBox" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
-                        <Label text="My Preferences:">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
                      </children>
                   </VBox>
                </content>
@@ -242,7 +238,7 @@
                                        </children>
                                     </VBox>
                                  </content></Tab>
-                            <Tab text="My Choice List">
+                            <Tab text="My Module Preferences">
                                  <content>
                                     <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                                        <children>
