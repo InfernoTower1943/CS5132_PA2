@@ -2,6 +2,7 @@ package main;
 
 import javafx.util.Pair;
 
+import javax.print.attribute.standard.PrinterResolution;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,6 +96,24 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
         }
     }
 
+    public Boolean checkPlaceInTimeSlot(String moduleCode, Integer timeSlotID, T item){
+        PriorityQueue priorityQueue = getTimeSlotPQ(moduleCode,timeSlotID);
+        ArrayList<PriorityNode<T,S>> arrayList=new ArrayList<>();
+        boolean found=false;
+        while (!priorityQueue.isEmpty()){
+            PriorityNode<T,S> priorityNode=priorityQueue.tree.top();
+            priorityQueue.dequeue();
+            arrayList.add(priorityNode);
+            if (priorityNode.item.equals(item)){
+                found=true;
+            }
+        }
+        for (PriorityNode priorityNode:arrayList){
+            priorityQueue.enqueue(priorityNode.item,priorityNode.priority);
+        }
+        return found;
+    }
+
     public Pair<String, Integer> getTimeSlotIDFromStr(String timeSlotDescription){
         for (Map.Entry<Pair<String, Integer>, String> entry : timeSlotDescriptionMap.entrySet()) {
             if (entry.getValue().equals(timeSlotDescription)) {
@@ -118,7 +137,7 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
     }
 
     public int getPriority(int preference, int num_vacancies){
-        return preference * 1000 + num_vacancies;
+        return - (preference * 1000) + num_vacancies;
     }
 
 }

@@ -197,9 +197,20 @@ public class Student extends Application{
                         currentTimeSlot=timeSlot.getKey();
                         currentTimeSlotID=timeSlot.getValue();
                         int vacancyNumber = timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))));
-                        if (vacancyNumber <= 0) studentVacanciesLabel.setText("Full!");
-                        else studentVacanciesLabel.setText("Available");
-                        signUpButton.setDisable(false);
+                        if (vacancyNumber <= 0) {
+                            studentVacanciesLabel.setText("Full!");
+                            signUpButton.setDisable(true);
+                        }
+                        else {
+                            if (!modulePQ.checkPlaceInTimeSlot(currentModuleCode,currentTimeSlotID,studentID)){
+                                studentVacanciesLabel.setText("Available");
+                                signUpButton.setDisable(false);
+                            }
+                            else{
+                                studentVacanciesLabel.setText("Signed Up");
+                                signUpButton.setDisable(true);
+                            }
+                        }
                         //System.out.println("Selected Time Slot: " + timeSlot.toString());
                     }
                 }
@@ -214,6 +225,7 @@ public class Student extends Application{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                studentVacanciesLabel.setText("Signed Up");
                 signUpButton.setDisable(true);
             }
         });
