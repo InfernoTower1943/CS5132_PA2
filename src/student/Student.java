@@ -21,6 +21,7 @@ import java.util.*;
 import javafx.util.Pair;
 import main.Main;
 import main.ModulePriorityQueue;
+import main.PriorityFix;
 
 public class Student extends Application{
     private Stage globalStage;
@@ -197,21 +198,9 @@ public class Student extends Application{
                         currentTimeSlot=timeSlot.getKey();
                         currentTimeSlotID=timeSlot.getValue();
                         int vacancyNumber = timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))));
-                        if (vacancyNumber <= 0) {
-                            studentVacanciesLabel.setText("Full!");
-                            signUpButton.setDisable(true);
-                        }
-                        else {
-                            if (!modulePQ.checkPlaceInTimeSlot(currentModuleCode,currentTimeSlotID,studentID)){
-                                studentVacanciesLabel.setText("Available");
-                                signUpButton.setDisable(false);
-                            }
-                            else{
-                                studentVacanciesLabel.setText("Signed Up");
-                                signUpButton.setDisable(true);
-                            }
-                        }
-                        //System.out.println("Selected Time Slot: " + timeSlot.toString());
+                        if (vacancyNumber <= 0) studentVacanciesLabel.setText("Full!");
+                        else studentVacanciesLabel.setText("Available");
+                        signUpButton.setDisable(false);
                     }
                 }
         );
@@ -219,13 +208,15 @@ public class Student extends Application{
         signUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                modulePQ.enqueueToTimeSlot(currentModuleCode,currentTimeSlotID,studentID,modulePQ.getPriority(preference, timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))))));//studentsRequiredModules.contains(currentModuleCode),1,Instant.now().toEpochMilli()));
+                modulePQ.enqueueToTimeSlot(currentModuleCode, currentTimeSlotID, studentID,
+                        modulePQ.getPriority(preference, timeVacancy.get(
+                                new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
+                                        new Pair<>(currentModuleCode, currentTimeSlotID))))));
                 try {
                     write();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                studentVacanciesLabel.setText("Signed Up");
                 signUpButton.setDisable(true);
             }
         });
