@@ -58,16 +58,23 @@ public class PriorityFix {
         System.out.println(Arrays.toString(videoSequence("clown.in")));
     }
 }
-class PriorityQueue<T, S extends Comparable<S>>{
+
+class PriorityQueue<T, S extends Comparable<S>> {
     HeapTree<T, S> tree = new HeapTree<T, S>();
-    void enqueue(T item, S priority){
+
+    void enqueue(T item, S priority) {
         tree.addElement(new PriorityNode<T, S>(item, priority));
     }
 
-    T dequeue(){
+    T dequeue() {
         return tree.removeMax().getItem();
     }
+
+    public boolean isEmpty() {
+        return tree.isEmpty();
+    }
 }
+
 
 class HeapTree<T, S extends Comparable<S>>{
     PriorityNode<T, S> root;
@@ -174,6 +181,10 @@ class HeapTree<T, S extends Comparable<S>>{
                     break;
             }
         }
+    }
+
+    public boolean isEmpty(){
+        return count==0;
     }
 }
 

@@ -13,6 +13,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 
@@ -116,6 +118,21 @@ public class Student extends Application{
         }
         scanner.close();
 
+        scanner = new Scanner(new File("ModulePriorityQueue.txt"));
+        scanner.useDelimiter("\n");
+        while(scanner.hasNext()){
+            String line = scanner.next();
+            String[] args = line.split(",");
+            String module=args[0];
+            long timeSlotID=Long.parseLong(args[1].strip());
+            long count=Long.parseLong(args[2].strip());
+            for (int i=0; i<count;i++){
+                line = scanner.next();
+                args = line.split(",");
+                modulePQ.enqueueToTimeSlot(module,timeSlotID,args[0],Long.parseLong(args[1].strip()));
+            }
+        }
+        scanner.close();
         ListView studentModulesAvailableListView = (ListView) loader.getNamespace().get("studentModulesAvailableListView");
         studentModulesAvailableListView.getItems().addAll(moduleSet);
 
@@ -169,6 +186,11 @@ public class Student extends Application{
             @Override
             public void handle(ActionEvent actionEvent) {
                 modulePQ.enqueueToTimeSlot(currentModuleCode,currentTimeSlotID,studentID,modulePQ.getPriority(studentsRequiredModules.contains(currentModuleCode),1,Instant.now().toEpochMilli()));
+                try {
+                    write();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 signUpButton.setDisable(true);
                 studentSignUpCancelButton.setDisable(false);
             }
@@ -199,5 +221,26 @@ public class Student extends Application{
         primaryStage.show();
 
 
+    }
+
+    private static void write() throws IOException {
+        FileWriter outputStream = new FileWriter("ModulePriorityQueue.txt");
+        for (String moduleCode : moduleSet) {
+            for (Long id:modulePQ.getTimeSlotIDs(moduleCode)){
+                if (!modulePQ.PQIsEmpty(modulePQ.getTimeSlotPQ(moduleCode,id))){
+                    outputStream.write(moduleCode + "," + id + "," + modulePQ.PQLength(modulePQ.getTimeSlotPQ(moduleCode,id))+"\n");
+                }
+                ArrayList<Pair<String,Long>> arrayList=new ArrayList<>();
+                while (!modulePQ.PQIsEmpty(modulePQ.getTimeSlotPQ(moduleCode,id))){
+                    Pair<String, Long> pair=modulePQ.dequeueFromTimeSlot(moduleCode,id);
+                    outputStream.write(pair.getKey() + "," + pair.getValue() +"\n");
+                    arrayList.add(pair);
+                }
+                for (Pair<String,Long> pair: arrayList){
+                    modulePQ.enqueueToTimeSlot(moduleCode,id,pair.getKey(),pair.getValue());
+                }
+            }
+        }
+        outputStream.close();
     }
 }

@@ -40,6 +40,14 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
         return null;
     }
 
+    public boolean PQIsEmpty(PriorityQueue<T,S> priorityQueue){
+        return priorityQueue.isEmpty();
+    }
+
+    public int PQLength(PriorityQueue<T,S> priorityQueue){
+        return priorityQueue.tree.count;
+    }
+
     public void enqueueToTimeSlot(String moduleCode, Long timeSlotID, T item, S priority){
         Pair<String, Long> p = new Pair<>(moduleCode, timeSlotID);
         if (modulePQMap.containsKey(p)){
@@ -49,12 +57,13 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
         }
     }
 
-    public PriorityNode<T, S> dequeueFromTimeSlot(String moduleCode, Long timeSlotID){
+    public Pair<T, S> dequeueFromTimeSlot(String moduleCode, Long timeSlotID){
         Pair<String, Long> p = new Pair<>(moduleCode, timeSlotID);
         if (modulePQMap.containsKey(p)){
             PriorityNode<T, S> top = modulePQMap.get(p).tree.top();
             modulePQMap.get(p).dequeue();
-            return top;
+            Pair<T,S> pair=new Pair<>(top.item,top.priority);
+            return pair;
         }
         return null;
     }

@@ -142,6 +142,22 @@ public class Admin extends Application{
         }
         scanner.close();
 
+        scanner = new Scanner(new File("ModulePriorityQueue.txt"));
+        scanner.useDelimiter("\n");
+        while(scanner.hasNext()){
+            String line = scanner.next();
+            String[] args = line.split(",");
+            String module=args[0];
+            long timeSlotID=Long.parseLong(args[1].strip());
+            long count=Long.parseLong(args[2].strip());
+            for (int i=0; i<count;i++){
+                line = scanner.next();
+                args = line.split(",");
+                modulePQ.enqueueToTimeSlot(module,timeSlotID,args[0],Long.parseLong(args[1].strip()));
+            }
+        }
+        scanner.close();
+
         mainSplitPane = (SplitPane) loader.getNamespace().get("mainSplitPane");
 
         firstPane = (ScrollPane) loader.getNamespace().get("firstPane");
@@ -360,10 +376,23 @@ public class Admin extends Application{
     private static void write() throws IOException {
         FileWriter outputStream = new FileWriter("ModuleDetails.txt");
         FileWriter outputStream1 = new FileWriter("ModulesAndTimeSlots.txt");
+        FileWriter outputStream2 = new FileWriter("ModulePriorityQueue.txt");
         for (String moduleCode : moduleSet) {
             outputStream.write(moduleCode + "," + moduleTitles.get(moduleCode) + "," + moduleDescriptions.get(moduleCode)+"\n");
             ArrayList<Long> currentModuleAllTimeSlots = new ArrayList<>(modulePQ.getTimeSlotIDs(moduleCode));
             for (long timeSlotID : currentModuleAllTimeSlots) {
+                if (!modulePQ.PQIsEmpty(modulePQ.getTimeSlotPQ(moduleCode,timeSlotID))){
+                    outputStream2.write(moduleCode + "," + timeSlotID + "," + modulePQ.PQLength(modulePQ.getTimeSlotPQ(moduleCode,timeSlotID))+"\n");
+                }
+                ArrayList<Pair<String,Long>> arrayList=new ArrayList<>();
+                while (!modulePQ.PQIsEmpty(modulePQ.getTimeSlotPQ(moduleCode,timeSlotID))){
+                    Pair<String, Long> pair=modulePQ.dequeueFromTimeSlot(moduleCode,timeSlotID);
+                    outputStream2.write(pair.getKey() + "," + pair.getValue() +"\n");
+                    arrayList.add(pair);
+                }
+                for (Pair<String,Long> pair: arrayList){
+                    modulePQ.enqueueToTimeSlot(moduleCode,timeSlotID,pair.getKey(),pair.getValue());
+                }
                 String timeSlotDescription = modulePQ.getTimeSlot(moduleCode, timeSlotID);
                 outputStream1.write(moduleCode+","+timeSlotID+","+timeSlotDescription+","
                         +timeVacancy.get(new Pair<>(moduleCode, timeSlotDescription)) + ','
@@ -372,5 +401,6 @@ public class Admin extends Application{
         }
         outputStream.close();
         outputStream1.close();
+        outputStream2.close();
     }
 }
