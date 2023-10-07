@@ -30,11 +30,11 @@ public class Admin extends Application{
     public static Map<String, String> moduleDescriptions = new HashMap<>();
     public static Map<Pair<String, String>, Integer> timeVacancy= new HashMap<>();
     public static Map<Pair<String, String>, Integer> timeTotal= new HashMap<>();
-    public static String studentID;
 
     public static SortedSet<String> studentSet = new TreeSet<String>();
     public static Map<String, SortedSet<String>> studentsRequiredModules = new HashMap<>();
     public static String selectedModule = "";
+    public static String selectedStudent = "";
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -218,6 +218,7 @@ public class Admin extends Application{
                         mainSplitPane.setDividerPositions(0.25, 0.25);
 
                         String studentID = (String) newValue;
+                        selectedStudent = studentID;
                         studentDetailsLabel.setText("Student Details - "+studentID);
                         adminRequiredModulesListView.getItems().clear();
 
@@ -334,9 +335,10 @@ public class Admin extends Application{
             @Override
             public void handle(ActionEvent actionEvent) {
                 adminRequiredModulesListView.setDisable(true);
-
                 requiredModulesEditButton.setDisable(false);
                 requiredModulesSaveButton.setDisable(true);
+
+                //studentsRequiredModules.get(selectedStudent).add(args[i]);
             }
         });
 

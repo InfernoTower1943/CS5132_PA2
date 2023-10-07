@@ -69,8 +69,6 @@ public class Student extends Application{
     Button logoutButton;
     @FXML
     Button signUpButton;
-    @FXML
-    Button studentSignUpCancelButton;
 
 
     @Override
@@ -137,11 +135,8 @@ public class Student extends Application{
         studentRequiredModulesListView = (ListView) loader.getNamespace().get("studentRequiredModulesListView");
         logoutButton = (Button) loader.getNamespace().get("logoutButton");
         signUpButton = (Button) loader.getNamespace().get("signUpButton");
-        studentSignUpCancelButton = (Button) loader.getNamespace().get("studentSignUpCancelButton");
 
         signUpButton.setDisable(true);
-        studentSignUpCancelButton.setDisable(true); // remove?
-
         // TODO: If have previously stored data, load it and prevent user from editing.
 
         studentModulesAvailableListView.getSelectionModel().selectedItemProperty().addListener(
@@ -183,7 +178,9 @@ public class Student extends Application{
                         Pair<String, Integer> timeSlot = modulePQ.getTimeSlotIDFromStr((String) (studentAvailableTimeSlotsComboBox.getItems().get((Integer) newValue)));
                         currentTimeSlot=timeSlot.getKey();
                         currentTimeSlotID=timeSlot.getValue();
-                        studentVacanciesLabel.setText(timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))))+"");
+                        int vacancyNumber = timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))));
+                        if (vacancyNumber <= 0) studentVacanciesLabel.setText("Full!");
+                        else studentVacanciesLabel.setText("Available");
                         signUpButton.setDisable(false);
                         //System.out.println("Selected Time Slot: " + timeSlot.toString());
                     }
@@ -195,17 +192,6 @@ public class Student extends Application{
             public void handle(ActionEvent actionEvent) {
                 modulePQ.enqueueToTimeSlot(currentModuleCode,currentTimeSlotID,studentID,modulePQ.getPriority(preference, timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))))));//studentsRequiredModules.contains(currentModuleCode),1,Instant.now().toEpochMilli()));
                 signUpButton.setDisable(true);
-                studentSignUpCancelButton.setDisable(false);
-            }
-        });
-
-        // remove this feature
-        studentSignUpCancelButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                // TODO: Remove them from queue
-                studentSignUpCancelButton.setDisable(true);
-                signUpButton.setDisable(false);
             }
         });
 
@@ -224,6 +210,6 @@ public class Student extends Application{
         primaryStage.setScene(scene);
         primaryStage.show();
 
-
     }
+
 }
