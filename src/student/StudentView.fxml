@@ -149,6 +149,12 @@
                            </font>
                         </Label>
                         <ComboBox fx:id="studentAvailableTimeSlotsComboBox" prefWidth="400.0" />
+                        <Label fx:id="studentPreferenceLabel" text="My Preferences:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="studentPreferenceComboBox" prefWidth="150.0" />
                         <GridPane>
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0" />
@@ -214,11 +220,6 @@
                            </font>
                         </Label>
                         <TextArea fx:id="moduleDescriptionTextBox" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
-                        <Label text="My Preferences:">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
                      </children>
                   </VBox>
                </content>
