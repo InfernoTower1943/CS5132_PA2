@@ -21,6 +21,7 @@ import java.util.*;
 import javafx.util.Pair;
 import main.Main;
 import main.ModulePriorityQueue;
+import main.PriorityFix;
 
 public class Student extends Application{
     private Stage globalStage;
@@ -200,7 +201,6 @@ public class Student extends Application{
                         if (vacancyNumber <= 0) studentVacanciesLabel.setText("Full!");
                         else studentVacanciesLabel.setText("Available");
                         signUpButton.setDisable(false);
-                        //System.out.println("Selected Time Slot: " + timeSlot.toString());
                     }
                 }
         );
@@ -208,7 +208,10 @@ public class Student extends Application{
         signUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                modulePQ.enqueueToTimeSlot(currentModuleCode,currentTimeSlotID,studentID,modulePQ.getPriority(preference, timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))))));//studentsRequiredModules.contains(currentModuleCode),1,Instant.now().toEpochMilli()));
+                modulePQ.enqueueToTimeSlot(currentModuleCode, currentTimeSlotID, studentID,
+                        modulePQ.getPriority(preference, timeVacancy.get(
+                                new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
+                                        new Pair<>(currentModuleCode, currentTimeSlotID))))));
                 try {
                     write();
                 } catch (IOException e) {
