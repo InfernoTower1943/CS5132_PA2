@@ -90,7 +90,6 @@ public class Main extends Application {
                     try {
                         Student.studentID = usernameTextBox.getText();
                         new Student().start(globalStage);
-                        //new Student(usernameTextBox.getText()).start(globalStage);
                     } catch (Exception e) {
                         errorText.setText("An error occurred: " + e.getClass().getCanonicalName());
                         errorText.setOpacity(1);
