@@ -45,7 +45,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         globalStage = primaryStage;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/LoginView.fxml"));
         Parent root = loader.load();
         //Parent root = loginViewRoot;
 

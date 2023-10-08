@@ -143,14 +143,17 @@ public class Student extends Application{
                 args = line.split(",");
                 modulePQ.enqueueToTimeSlot(module,timeSlotID,args[0],Integer.parseInt(args[1].strip()));
                 if (args[0].equals(studentID)){
+                    int pref = 0;
                     if (Integer.parseInt(args[1].strip()) > 0) {
-                        if (availablePreferences.contains((Integer.parseInt(args[1].strip()) / 1000) + 1)) {
-                            availablePreferences.remove(Integer.valueOf(Integer.parseInt(args[1].strip()) / 1000 + 1));
-                        }
-                        if (!registeredModules.containsKey(module)) {
-                            registeredModules.put(module, new Pair(timeSlotID, (Integer.parseInt(args[1].strip()) / 1000) + 1));
+                        pref = (Integer.parseInt(args[1].strip()) / 1000) + 1;
+                        if (availablePreferences.contains(pref)){
+                            availablePreferences.remove(pref);
                         }
                     }
+                    if (!registeredModules.containsKey(module)) {
+                        registeredModules.put(module, new Pair(timeSlotID, pref));
+                    }
+
                 }
             }
         }
