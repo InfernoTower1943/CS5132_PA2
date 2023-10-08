@@ -149,12 +149,12 @@
                            </font>
                         </Label>
                         <ComboBox fx:id="studentAvailableTimeSlotsComboBox" prefWidth="400.0" />
-                        <Label fx:id="studentPreferenceLabel" text="My Preferences:">
+                        <Label fx:id="studentPreferenceLabel" text="My Preferences:" visible="false">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="studentPreferenceComboBox" prefWidth="150.0" />
+                        <ComboBox fx:id="studentPreferenceComboBox" prefWidth="150.0" visible="false" />
                         <GridPane>
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0" />
