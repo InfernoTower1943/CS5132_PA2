@@ -238,11 +238,13 @@ public class Student extends Application{
         signUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                int vacancy=timeVacancy.get(
+                        new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
+                                new Pair<>(currentModuleCode, currentTimeSlotID))));
                 modulePQ.enqueueToTimeSlot(currentModuleCode, currentTimeSlotID, studentID,
-                        modulePQ.getPriority(preference, timeVacancy.get(
-                                new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
-                                        new Pair<>(currentModuleCode, currentTimeSlotID))))));
-
+                        modulePQ.getPriority(preference, vacancy));
+                timeVacancy.put(new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
+                        new Pair<>(currentModuleCode, currentTimeSlotID))),vacancy-1);
                 availablePreferences.remove(Integer.valueOf(preference));
                 try {
                     write();
@@ -272,6 +274,7 @@ public class Student extends Application{
     }
     private static void write() throws IOException {
         FileWriter outputStream = new FileWriter("ModulePriorityQueue.txt");
+        FileWriter outputStream1 = new FileWriter("ModulesAndTimeSlots.txt");
         for (String moduleCode : moduleSet) {
             for (int id:modulePQ.getTimeSlotIDs(moduleCode)){
                 if (!modulePQ.PQIsEmpty(modulePQ.getTimeSlotPQ(moduleCode,id))){
@@ -286,9 +289,14 @@ public class Student extends Application{
                 for (Pair<String,Integer> pair: arrayList){
                     modulePQ.enqueueToTimeSlot(moduleCode,id,pair.getKey(),pair.getValue());
                 }
+                String timeSlotDescription = modulePQ.getTimeSlot(moduleCode, id);
+                outputStream1.write(moduleCode+","+id+","+timeSlotDescription+","
+                        +timeVacancy.get(new Pair<>(moduleCode, timeSlotDescription)) + ','
+                        +timeTotal.get(new Pair<>(moduleCode, timeSlotDescription)) + "\n");
             }
         }
         outputStream.close();
+        outputStream1.close();
     }
     public static void reset(){
         modulePQ = new ModulePriorityQueue<String, Integer>();
