@@ -20,6 +20,7 @@ import java.util.*;
 import javafx.util.Pair;
 import main.Main;
 import main.ModulePriorityQueue;
+import student.Student;
 
 public class Admin extends Application{
     private Stage globalStage;
@@ -85,6 +86,8 @@ public class Admin extends Application{
     Button descriptionSaveButton;
     @FXML
     ListView adminRequiredModulesListView;
+    @FXML
+    Button adminViewPQButton;
     @FXML
     Button requiredModulesEditButton;
     @FXML
@@ -154,6 +157,7 @@ public class Admin extends Application{
             String[] args = line.split(",");
             String module=args[0];
             int timeSlotID=Integer.parseInt(args[1].strip());
+            System.out.println(line + args[0] + args[1]);
             long count=Long.parseLong(args[2].strip());
             for (int i=0; i<count;i++){
                 line = scanner.next();
@@ -191,6 +195,7 @@ public class Admin extends Application{
         timeSlotSaveButton = (Button) loader.getNamespace().get("timeSlotSaveButton");
         descriptionEditButton = (Button) loader.getNamespace().get("descriptionEditButton");
         descriptionSaveButton = (Button) loader.getNamespace().get("descriptionSaveButton");
+        adminViewPQButton = (Button) loader.getNamespace().get("adminViewPQButton");
         requiredModulesEditButton = (Button) loader.getNamespace().get("requiredModulesEditButton");
         requiredModulesSaveButton = (Button) loader.getNamespace().get("requiredModulesSaveButton");
         logoutButton = (Button) loader.getNamespace().get("logoutButton");
@@ -378,6 +383,23 @@ public class Admin extends Application{
                 requiredModulesSaveButton.setDisable(true);
 
                 //studentsRequiredModules.get(selectedStudent).add(args[i]);
+            }
+        });
+
+        adminViewPQButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    PQView.moduleTitle = adminModuleTitleTextBox.getText();
+                    PQView.moduleCode = adminModuleCodeTextBox.getText();
+                    PQView.timeSlot = ""+adminAvailableTimeSlotsComboBox.getValue();
+                    PQView.studentID = "TODO";
+                    PQView.pref = "TODO";
+
+                    new PQView().start(new Stage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

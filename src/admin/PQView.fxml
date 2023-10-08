@@ -83,17 +83,17 @@
                   <Font size="18.0" fx:id="x11111" />
                </font>
             </Label>
-            <Label alignment="CENTER" style="&#10;" text="Waiting..." textAlignment="CENTER" wrapText="false" GridPane.columnIndex="1">
+            <Label fx:id="PQmoduleTitleLabel" alignment="CENTER" style="&#10;" text="Waiting..." textAlignment="CENTER" wrapText="false" GridPane.columnIndex="1">
                <font>
                   <Font size="18.0" fx:id="x1111111" />
                </font>
             </Label>
-            <Label alignment="CENTER" style="&#10;" text="Waiting..." textAlignment="CENTER" wrapText="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label fx:id="PQmoduleCodeLabel" alignment="CENTER" style="&#10;" text="Waiting..." textAlignment="CENTER" wrapText="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font size="18.0" fx:id="x1111112" />
                </font>
             </Label>
-            <Label alignment="CENTER" style="&#10;" text="Waiting..." textAlignment="CENTER" wrapText="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Label fx:id="PQtimeSlotLabel" alignment="CENTER" style="&#10;" text="Waiting..." textAlignment="CENTER" wrapText="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <font>
                   <Font size="18.0" fx:id="x1111113" />
                </font>
@@ -132,19 +132,19 @@
                   <Font size="18.0" fx:id="x11111" />
                </font>
             </Label>
-            <Label alignment="CENTER" style="&#10;" text="Waiting..." textAlignment="CENTER" wrapText="false" GridPane.columnIndex="1">
+            <Label fx:id="PQstudentIDLabel" alignment="CENTER" style="&#10;" text="Waiting..." textAlignment="CENTER" wrapText="false" GridPane.columnIndex="1">
                <font>
                   <Font size="18.0" fx:id="x111111" />
                </font>
             </Label>
-            <Label alignment="CENTER" style="&#10;" text="Waiting..." textAlignment="CENTER" wrapText="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label fx:id="PQprefLabel" alignment="CENTER" style="&#10;" text="Waiting..." textAlignment="CENTER" wrapText="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font size="18.0" fx:id="x111112" />
                </font>
             </Label>
          </children>
       </GridPane>
-      <Button mnemonicParsing="false" style="-fx-background-color: ff5459;" text="Remove Top" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="removeTopButton" mnemonicParsing="false" style="-fx-background-color: ff5459;" text="Remove Top" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
