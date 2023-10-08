@@ -1,4 +1,12 @@
-ME2100,0,4
+CS2100,0,1
+student2,-1
+CS2100,1,1
+student2,-2
+CS2100,2,1
+student2,-3
+EL5131,0,1
+student2,1998
+ME2100,0,3
 student3,2706937
 student1,7
 student2,7
