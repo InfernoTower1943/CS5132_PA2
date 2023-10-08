@@ -381,8 +381,6 @@ public class Admin extends Application{
                 adminRequiredModulesListView.setDisable(true);
                 requiredModulesEditButton.setDisable(false);
                 requiredModulesSaveButton.setDisable(true);
-
-                //studentsRequiredModules.get(selectedStudent).add(args[i]);
             }
         });
 
