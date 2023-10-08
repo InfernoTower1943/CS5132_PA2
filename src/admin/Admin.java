@@ -38,6 +38,7 @@ public class Admin extends Application{
     public static Map<String, SortedSet<String>> studentsRequiredModules = new HashMap<>();
     public static String selectedModule = "";
     public static String selectedStudent = "";
+    public static String selectedTimeSlot = "";
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -231,7 +232,7 @@ public class Admin extends Application{
                 (observable, oldValue, newValue) -> {
                     if (newValue != null) {
 
-                        String selectedTimeSlot = (String) newValue;
+                        selectedTimeSlot = (String) newValue;
                         adminTotalSpotsTextBox.setText(Integer.toString(timeTotal.get(
                                 new Pair<>(selectedModule, selectedTimeSlot))));
 
@@ -387,14 +388,30 @@ public class Admin extends Application{
         adminViewPQButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                boolean flag=true;
                 try {
                     PQView.moduleTitle = adminModuleTitleTextBox.getText();
                     PQView.moduleCode = adminModuleCodeTextBox.getText();
                     PQView.timeSlot = ""+adminAvailableTimeSlotsComboBox.getValue();
-                    PQView.studentID = "TODO";
+                    ArrayList<Integer> currentModuleAllTimeSlots = new ArrayList<>(modulePQ.getTimeSlotIDs(selectedModule));
+                    System.out.println(PQView.timeSlot);
+                    for (Integer timeSlotID : currentModuleAllTimeSlots) {
+                        System.out.println(PQView.moduleCode + " " + timeSlotID);
+                        System.out.println(modulePQ.timeSlotDescriptionMap.get(new Pair(PQView.moduleCode, timeSlotID)));
+                        if (modulePQ.timeSlotDescriptionMap.get(new Pair(PQView.moduleCode, timeSlotID)).equals(PQView.timeSlot)){
+                            try {
+                                PQView.studentID = (String) modulePQ.getTimeSlotPQ(selectedModule, timeSlotID).top().getItem();
+                            }catch(Exception e){
+                                Alert a = new Alert(Alert.AlertType.WARNING);
+                                a.setHeaderText("Priority Queue is Empty!");
+                                flag=false;
+                                a.show();
+                            }
+                        }
+                    }
                     PQView.pref = "TODO";
 
-                    new PQView().start(new Stage());
+                    if (flag) new PQView().start(new Stage());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -416,6 +433,25 @@ public class Admin extends Application{
         primaryStage.setScene(scene);
         primaryStage.show();
 
+    }
+
+    public static void removePQTop(){
+        ArrayList<Integer> currentModuleAllTimeSlots = new ArrayList<>(modulePQ.getTimeSlotIDs(selectedModule));
+        for (Integer timeSlotID : currentModuleAllTimeSlots) {
+            System.out.println(PQView.moduleCode + " " + timeSlotID);
+            System.out.println(modulePQ.timeSlotDescriptionMap.get(new Pair(PQView.moduleCode, timeSlotID)));
+            if (modulePQ.timeSlotDescriptionMap.get(new Pair(PQView.moduleCode, timeSlotID)).equals(PQView.timeSlot)){
+                try {
+                    String student = modulePQ.getTimeSlotPQ(selectedModule, timeSlotID).dequeue();
+                    Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+                    a.setHeaderText("Dequeued student " + student + "!");
+                    a.show();
+                    write();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private static void write() throws IOException {

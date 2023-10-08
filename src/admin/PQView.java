@@ -37,6 +37,12 @@ public class PQView extends Application {
         PQstudentIDLabel.setText(studentID);
         PQprefLabel.setText(pref);
 
+        removeTopButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Admin.removePQTop();
+            }
+        });
 
         Scene scene = new Scene(root, 640, 400);
 

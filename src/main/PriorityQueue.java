@@ -7,13 +7,18 @@ public class PriorityQueue<T, S extends Comparable<S>> {
         tree.addElement(new PriorityNode<T, S>(item, priority));
     }
 
-    T dequeue() {
+    public T dequeue() {
         return tree.removeMax().getItem();
     }
 
     public S peek(){
         if (tree.isEmpty()) return null;
         return tree.root.priority;
+    }
+
+    public PriorityNode top(){
+        if (tree.isEmpty()) return null;
+        return tree.root;
     }
 
     public boolean isEmpty() {

@@ -240,8 +240,8 @@ public class Student extends Application{
                         currentTimeSlotID=timeSlot.getValue();
                         int vacancyNumber = timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))));
                         vacant = vacancyNumber > 0;
-                        if (!vacant) { studentVacanciesLabel.setText("Full, Depends on preference");}
-                        else studentVacanciesLabel.setText("Available");
+                        if (!vacant) { studentVacanciesLabel.setText("Full, Depends on preference"); signUpButton.setDisable(true);}
+                        else {studentVacanciesLabel.setText("Available"); signUpButton.setDisable(false);}
 
                         if (required)
                             signUpButton.setDisable(false);
@@ -296,6 +296,9 @@ public class Student extends Application{
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    timeVacancy.put(
+                            new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
+                                    new Pair<>(currentModuleCode, currentTimeSlotID))), vacancy-1);
                     signUpButton.setDisable(true);
                 }
             }
