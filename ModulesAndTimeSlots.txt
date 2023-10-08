@@ -16,4 +16,4 @@ ME2100,3,Tuesday 12pm-1pm,7,7
 ME2100,4,Tuesday 1pm-2pm,7,7
 ME2100,5,Tuesday 2pm-3pm,7,7
 ME2100,6,Tuesday 3pm-4pm,7,7
-ME2100,7,Tuesday 4pm-5pm,9,7
+ME2100,7,Tuesday 4pm-5pm,7,7

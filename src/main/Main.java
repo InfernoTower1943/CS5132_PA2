@@ -45,12 +45,12 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         globalStage = primaryStage;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/LoginView.fxml"));
         Parent root = loader.load();
         //Parent root = loginViewRoot;
 
         Scene scene = new Scene(root, 1200, 800);
-        Scanner scanner = new Scanner(new File("ModulesAndTimeSlots.txt"));
+        Scanner scanner = new Scanner(new File(System.getProperty("user.dir")+"/"+"ModulesAndTimeSlots.txt"));
         while(scanner.hasNextLine()){
             String line = scanner.nextLine();
             String[] args = line.split(",");
@@ -60,7 +60,7 @@ public class Main extends Application {
         scanner.close();
 
         // student and Admin username and password file input
-        scanner = new Scanner(new File("StudentLoginDetails.txt"));
+        scanner = new Scanner(new File(System.getProperty("user.dir")+"/"+"StudentLoginDetails.txt"));
         while(scanner.hasNextLine()){
             String line = scanner.nextLine();
             String[] args = line.split(",");
@@ -68,7 +68,7 @@ public class Main extends Application {
         }
         scanner.close();
 
-        scanner = new Scanner(new File("AdminLoginDetails.txt"));
+        scanner = new Scanner(new File(System.getProperty("user.dir")+"/"+"AdminLoginDetails.txt"));
         while(scanner.hasNextLine()){
             String line = scanner.nextLine();
             String[] args = line.split(",");
