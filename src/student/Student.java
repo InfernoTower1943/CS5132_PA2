@@ -100,9 +100,9 @@ public class Student extends Application{
         scanner = new Scanner(new File("ModuleDetails.txt"));
         while(scanner.hasNextLine()){
             String line = scanner.nextLine();
-            String[] args = line.split(",", 3);
+            String[] args = line.split(",", 4);
             moduleDetails.put(args[0], args[1]);
-            moduleDescriptions.put(args[0], args[2]);
+            moduleDescriptions.put(args[0], args[3]);
         }
         scanner.close();
 

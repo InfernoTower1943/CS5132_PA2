@@ -1,7 +1,7 @@
 CS2100,0,Monday 9am-10am,1,69
-CS2100,1,Monday 10am-11am,2,22
+CS2100,1,Monday 10am-11am,2,26
 CS2100,2,Monday 11am-12pm,3,23
-CS2100,3,Monday 12pm-1pm,4,24
+CS2100,3,Monday 12pm-1pm,4,26
 CS2100,4,Monday 1pm-2pm,5,25
 CS2100,5,Monday 2pm-3pm,6,26
 CS2100,6,Monday 3pm-4pm,7,28
@@ -14,3 +14,6 @@ ME2100,4,Tuesday 1pm-2pm,7,34
 ME2100,5,Tuesday 2pm-3pm,7,35
 ME2100,6,Tuesday 3pm-4pm,7,36
 ME2100,7,Tuesday 4pm-5pm,9,37
+HE1100,0,Wednesday 4pm-5pm,99,159
+HA6969,0,Thursday 4pm-5pm,3,3
+EL5131,0,Friday 4pm-5pm,4,5000

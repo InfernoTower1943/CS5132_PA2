@@ -28,6 +28,8 @@ public class Admin extends Application{
     public static SortedSet<String> moduleSet = new TreeSet<String>();
     public static Map<String, String> moduleTitles = new HashMap<>();
     public static Map<String, String> moduleDescriptions = new HashMap<>();
+    public static Map<String, Integer> modulePreferencePenalties = new HashMap<>();
+
     public static Map<Pair<String, String>, Integer> timeVacancy= new HashMap<>();
     public static Map<Pair<String, String>, Integer> timeTotal= new HashMap<>();
 
@@ -65,6 +67,8 @@ public class Admin extends Application{
     TextField adminModuleCodeTextBox;
     @FXML
     TextField adminTotalSpotsTextBox;
+    @FXML
+    TextField adminPenaltyTextBox;
     @FXML
     TextArea moduleDescriptionTextBox;
 
@@ -123,9 +127,10 @@ public class Admin extends Application{
         scanner = new Scanner(new File("ModuleDetails.txt"));
         while(scanner.hasNextLine()) {
             String line = scanner.nextLine();
-            String[] args = line.split(",", 3);
+            String[] args = line.split(",", 4);
             moduleTitles.put(args[0], args[1]);
-            moduleDescriptions.put(args[0], args[2]);
+            modulePreferencePenalties.put(args[0], Integer.parseInt(args[2]));
+            moduleDescriptions.put(args[0], args[3]);
         }
         scanner.close();
 
@@ -180,6 +185,7 @@ public class Admin extends Application{
 
         // TODO: make total spots text box numeric only
         adminTotalSpotsTextBox = (TextField) loader.getNamespace().get("adminTotalSpotsTextBox");
+        adminPenaltyTextBox = (TextField) loader.getNamespace().get("adminPenaltyTextBox");
         moduleDescriptionTextBox = (TextArea) loader.getNamespace().get("moduleDescriptionTextBox");
         timeSlotEditButton = (Button) loader.getNamespace().get("timeSlotEditButton");
         timeSlotSaveButton = (Button) loader.getNamespace().get("timeSlotSaveButton");
@@ -212,6 +218,7 @@ public class Admin extends Application{
                         moduleDescriptionTextBox.setText(moduleDescriptions.get(selectedModule));
 
                         adminTotalSpotsTextBox.setText("");
+                        adminPenaltyTextBox.setText(Integer.toString(modulePreferencePenalties.get(selectedModule)));
                     }
                 });
 
@@ -222,6 +229,12 @@ public class Admin extends Application{
                         String selectedTimeSlot = (String) newValue;
                         adminTotalSpotsTextBox.setText(Integer.toString(timeTotal.get(
                                 new Pair<>(selectedModule, selectedTimeSlot))));
+
+                        timeSlotEditButton.setDisable(false);
+
+                    }else{
+                        timeSlotEditButton.setDisable(true);
+                        timeSlotSaveButton.setDisable(true);
                     }
                 });
 
@@ -256,6 +269,7 @@ public class Admin extends Application{
                 adminModuleTitleTextBox.setEditable(true);
                 adminModuleCodeTextBox.setEditable(true);
                 adminTotalSpotsTextBox.setEditable(true);
+                adminPenaltyTextBox.setEditable(true);
                 timeSlotEditButton.setDisable(true);
                 timeSlotSaveButton.setDisable(false);
             }
@@ -268,6 +282,7 @@ public class Admin extends Application{
                 adminModuleTitleTextBox.setEditable(false);
                 adminModuleCodeTextBox.setEditable(false);
                 adminTotalSpotsTextBox.setEditable(false);
+                adminPenaltyTextBox.setEditable(false);
                 timeSlotEditButton.setDisable(false);
                 timeSlotSaveButton.setDisable(true);
                 moduleTitles.remove(selectedModule);
@@ -276,8 +291,15 @@ public class Admin extends Application{
                 String moduleCode = adminModuleCodeTextBox.getText();
                 String selectedTimeSlot = adminAvailableTimeSlotsComboBox.getValue().toString();
                 Integer totalSpots = Integer.valueOf(-1);
+                Integer penalty = Integer.valueOf(-1);
                 try {
                     totalSpots = Integer.parseInt(adminTotalSpotsTextBox.getText());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    System.out.println(e);
+                }
+                try {
+                    penalty = Integer.parseInt(adminPenaltyTextBox.getText());
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     System.out.println(e);
@@ -287,10 +309,11 @@ public class Admin extends Application{
                     timeTotal.remove(new Pair<>(moduleCode, selectedTimeSlot));
                     timeTotal.put(new Pair<>(moduleCode, selectedTimeSlot), totalSpots);
                 }
+                if (penalty != -1){
+                    modulePreferencePenalties.put(moduleCode, penalty);
+                }
 
                 moduleTitles.put(moduleCode,moduleTitle);
-                //moduleDescriptions.put(moduleCode,moduleDescriptions.get(selectedModule));
-                //moduleDescriptions.remove(selectedModule);
                 moduleSet.remove(selectedModule);
                 moduleSet.add(moduleCode);
 
@@ -380,7 +403,7 @@ public class Admin extends Application{
         FileWriter outputStream1 = new FileWriter("ModulesAndTimeSlots.txt");
         FileWriter outputStream2 = new FileWriter("ModulePriorityQueue.txt");
         for (String moduleCode : moduleSet) {
-            outputStream.write(moduleCode + "," + moduleTitles.get(moduleCode) + "," + moduleDescriptions.get(moduleCode)+"\n");
+            outputStream.write(moduleCode + "," + moduleTitles.get(moduleCode) + "," + (modulePreferencePenalties.get(moduleCode)) + "," + moduleDescriptions.get(moduleCode)+"\n");
             ArrayList<Integer> currentModuleAllTimeSlots = new ArrayList<>(modulePQ.getTimeSlotIDs(moduleCode));
             for (Integer timeSlotID : currentModuleAllTimeSlots) {
                     if (!modulePQ.PQIsEmpty(modulePQ.getTimeSlotPQ(moduleCode,timeSlotID))){

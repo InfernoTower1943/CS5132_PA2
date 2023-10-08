@@ -192,6 +192,7 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
                                     <Label text="Module Title">
@@ -212,11 +213,17 @@
                                     <TextField fx:id="adminModuleTitleTextBox" editable="false" GridPane.columnIndex="1" />
                                     <TextField fx:id="adminModuleCodeTextBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <TextField fx:id="adminTotalSpotsTextBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Label text="Non-required Penalty" GridPane.rowIndex="3">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="adminPenaltyTextBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                  </children>
                               </GridPane>
                               <ButtonBar prefHeight="40.0" prefWidth="185.0">
                                  <buttons>
-                                    <Button fx:id="timeSlotEditButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
+                                    <Button fx:id="timeSlotEditButton" disable="true" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #5b81ff;" text="Edit" textFill="WHITE" ButtonBar.buttonData="LEFT">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
