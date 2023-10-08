@@ -83,7 +83,7 @@ public class Student extends Application{
         Scene scene = new Scene(root, 1200, 800);
         reset();
 
-        Scanner scanner = new Scanner(new File("ModulesAndTimeSlots.txt"));
+        Scanner scanner = new Scanner(new File(System.getProperty("user.dir")+"/"+"ModulesAndTimeSlots.txt"));
         scanner.useDelimiter("\n");
         while(scanner.hasNext()){
             String line = scanner.next();
@@ -99,7 +99,7 @@ public class Student extends Application{
         }
         scanner.close();
 
-        scanner = new Scanner(new File("ModuleDetails.txt"));
+        scanner = new Scanner(new File(System.getProperty("user.dir")+"/"+"ModuleDetails.txt"));
         while(scanner.hasNextLine()){
             String line = scanner.nextLine();
             String[] args = line.split(",", 4);
@@ -109,7 +109,7 @@ public class Student extends Application{
         scanner.close();
 
         studentRequiredModulesListView = (ListView) loader.getNamespace().get("studentRequiredModulesListView");
-        scanner = new Scanner(new File("StudentRequiredModules.txt"));
+        scanner = new Scanner(new File(System.getProperty("user.dir")+"/"+"StudentRequiredModules.txt"));
         while(scanner.hasNextLine()){
             String line = scanner.nextLine();
             String[] args = line.split(",");
@@ -130,7 +130,7 @@ public class Student extends Application{
         availablePreferences.add(4);
         availablePreferences.add(5);
 
-        scanner = new Scanner(new File("ModulePriorityQueue.txt"));
+        scanner = new Scanner(new File(System.getProperty("user.dir")+"/"+"ModulePriorityQueue.txt"));
         scanner.useDelimiter("\n");
         while(scanner.hasNext()){
             String line = scanner.next();
@@ -143,10 +143,13 @@ public class Student extends Application{
                 args = line.split(",");
                 modulePQ.enqueueToTimeSlot(module,timeSlotID,args[0],Integer.parseInt(args[1].strip()));
                 if (args[0].equals(studentID)){
-                    if (availablePreferences.contains((Integer.parseInt(args[1].strip()) / 1000) + 1)){
-                        availablePreferences.remove(Integer.valueOf(Integer.parseInt(args[1].strip()) / 1000 + 1));
-                    } if (!registeredModules.containsKey(module)) {
-                        registeredModules.put(module, new Pair(timeSlotID, (Integer.parseInt(args[1].strip()) / 1000) + 1));
+                    if (Integer.parseInt(args[1].strip()) > 0) {
+                        if (availablePreferences.contains((Integer.parseInt(args[1].strip()) / 1000) + 1)) {
+                            availablePreferences.remove(Integer.valueOf(Integer.parseInt(args[1].strip()) / 1000 + 1));
+                        }
+                        if (!registeredModules.containsKey(module)) {
+                            registeredModules.put(module, new Pair(timeSlotID, (Integer.parseInt(args[1].strip()) / 1000) + 1));
+                        }
                     }
                 }
             }
@@ -248,9 +251,7 @@ public class Student extends Application{
                     if (newValue != null && !studentPreferenceComboBox.getSelectionModel().isEmpty()) {
                         preference = (Integer) studentPreferenceComboBox.getItems().get((Integer) newValue); // timeslot selection should have been made
                         if (!vacant){
-                            int vacancy=timeVacancy.get(
-                                    new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
-                                            new Pair<>(currentModuleCode, currentTimeSlotID))));
+                            int vacancy=timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))));
                             if (modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() != null &&
                                     modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() < modulePQ.getPriority(preference, vacancy)){
                                 if (required || (!required && !studentAvailableTimeSlotsComboBox.getSelectionModel().isEmpty())) {
@@ -270,9 +271,7 @@ public class Student extends Application{
         signUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                int vacancy=timeVacancy.get(
-                        new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
-                                new Pair<>(currentModuleCode, currentTimeSlotID))));
+                int vacancy=timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))));
                 if (vacant || (modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() != null && // if, full checks priority
                         modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() > modulePQ.getPriority(preference, vacancy))){
                     if (!vacant)
@@ -315,8 +314,8 @@ public class Student extends Application{
 
     }
     private static void write() throws IOException {
-        FileWriter outputStream = new FileWriter("ModulePriorityQueue.txt");
-        FileWriter outputStream1 = new FileWriter("ModulesAndTimeSlots.txt");
+        FileWriter outputStream = new FileWriter(System.getProperty("user.dir")+"/"+"ModulePriorityQueue.txt");
+        FileWriter outputStream1 = new FileWriter(System.getProperty("user.dir")+"/"+"ModulesAndTimeSlots.txt");
         for (String moduleCode : moduleSet) {
             for (int id:modulePQ.getTimeSlotIDs(moduleCode)){
                 if (!modulePQ.PQIsEmpty(modulePQ.getTimeSlotPQ(moduleCode,id))){

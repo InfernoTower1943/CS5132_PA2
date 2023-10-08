@@ -1,0 +1,4 @@
+HA6969,0,3
+student3,-3
+student1,-3
+student2,-3

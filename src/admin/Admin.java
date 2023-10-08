@@ -104,7 +104,7 @@ public class Admin extends Application{
 
         Scene scene = new Scene(root, 1200, 800);
 
-        Scanner scanner = new Scanner(new File("ModulesAndTimeSlots.txt"));
+        Scanner scanner = new Scanner(new File(System.getProperty("user.dir")+"/"+"ModulesAndTimeSlots.txt"));
         scanner.useDelimiter("\n");
         while(scanner.hasNext()){
             String line = scanner.next();
@@ -119,7 +119,7 @@ public class Admin extends Application{
                     Integer.parseInt(args[4].strip()));
         }
         scanner.close();
-        scanner = new Scanner(new File("StudentLoginDetails.txt"));
+        scanner = new Scanner(new File(System.getProperty("user.dir")+"/"+"StudentLoginDetails.txt"));
         scanner.useDelimiter("\n");
         while(scanner.hasNext()){
             String line = scanner.next();
@@ -128,7 +128,7 @@ public class Admin extends Application{
         }
         scanner.close();
 
-        scanner = new Scanner(new File("ModuleDetails.txt"));
+        scanner = new Scanner(new File(System.getProperty("user.dir")+"/"+"ModuleDetails.txt"));
         while(scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] args = line.split(",", 4);
@@ -138,7 +138,7 @@ public class Admin extends Application{
         }
         scanner.close();
 
-        scanner = new Scanner(new File("StudentRequiredModules.txt"));
+        scanner = new Scanner(new File(System.getProperty("user.dir")+"/"+"StudentRequiredModules.txt"));
         while(scanner.hasNextLine()){
             String line = scanner.nextLine();
             String[] args = line.split(",");
@@ -151,7 +151,7 @@ public class Admin extends Application{
         }
         scanner.close();
 
-        scanner = new Scanner(new File("ModulePriorityQueue.txt"));
+        scanner = new Scanner(new File(System.getProperty("user.dir")+"/"+"ModulePriorityQueue.txt"));
         scanner.useDelimiter("\n");
         while(scanner.hasNext()){
             String line = scanner.next();
@@ -449,9 +449,9 @@ public class Admin extends Application{
     }
 
     private static void write() throws IOException {
-        FileWriter outputStream = new FileWriter("ModuleDetails.txt");
-        FileWriter outputStream1 = new FileWriter("ModulesAndTimeSlots.txt");
-        FileWriter outputStream2 = new FileWriter("ModulePriorityQueue.txt");
+        FileWriter outputStream = new FileWriter(System.getProperty("user.dir")+"/"+"ModuleDetails.txt");
+        FileWriter outputStream1 = new FileWriter(System.getProperty("user.dir")+"/"+"ModulesAndTimeSlots.txt");
+        FileWriter outputStream2 = new FileWriter(System.getProperty("user.dir")+"/"+"ModulePriorityQueue.txt");
         for (String moduleCode : moduleSet) {
             outputStream.write(moduleCode + "," + moduleTitles.get(moduleCode) + "," + (modulePreferencePenalties.get(moduleCode)) + "," + moduleDescriptions.get(moduleCode)+"\n");
             ArrayList<Integer> currentModuleAllTimeSlots = new ArrayList<>(modulePQ.getTimeSlotIDs(moduleCode));
