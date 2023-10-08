@@ -136,8 +136,8 @@ public class ModulePriorityQueue<T, S extends Comparable<S>> {
         }
     }
 
-    public int getPriority(int required, int preference){
-        return - (required * 1000 + preference);
+    public int getPriority(int preference, int num_vacancies){
+        return preference * 1000 - num_vacancies;
     }
 
 }

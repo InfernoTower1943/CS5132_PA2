@@ -14,26 +14,26 @@ public class PriorityFix {
         int output_count = 0;
         int numCommands = 0;
         PriorityQueue<Integer, PriorityDate> pq = new PriorityQueue<Integer, PriorityDate>();
-        try{
+        try {
             File myObj = new File(filename);
             Scanner scanner = new Scanner(myObj);
             String init = scanner.nextLine();
 
             // initialise variables based on first line of input
-            numCommands=Integer.parseInt(init);
+            numCommands = Integer.parseInt(init);
             result = new int[numCommands];
 
-            for (int i=0; i<numCommands; i++){
+            for (int i = 0; i < numCommands; i++) {
                 String data = scanner.nextLine();
                 String[] videoData = data.split(" ");
-                if (Objects.equals(videoData[0], "add")){
-                    int id=Integer.parseInt(videoData[1]);
-                    int year=Integer.parseInt(videoData[2]);
-                    int month=Integer.parseInt(videoData[3]);
-                    int day=Integer.parseInt(videoData[4]);
+                if (Objects.equals(videoData[0], "add")) {
+                    int id = Integer.parseInt(videoData[1]);
+                    int year = Integer.parseInt(videoData[2]);
+                    int month = Integer.parseInt(videoData[3]);
+                    int day = Integer.parseInt(videoData[4]);
                     PriorityDate pd = new PriorityDate(year, month, day);
                     pq.enqueue(id, pd);
-                }else if (Objects.equals(videoData[0], "get")){
+                } else if (Objects.equals(videoData[0], "get")) {
                     result[i] = pq.dequeue();
                     output_count++;
                 }
@@ -43,9 +43,9 @@ public class PriorityFix {
             e.printStackTrace();
         }
         int[] final_result = new int[output_count];
-        int idx=0;
-        for (int i=0; i<numCommands; i++){
-            if (result[i]!=0){
+        int idx = 0;
+        for (int i = 0; i < numCommands; i++) {
+            if (result[i] != 0) {
                 final_result[idx] = result[i];
                 idx++;
             }
@@ -58,23 +58,6 @@ public class PriorityFix {
         System.out.println(Arrays.toString(videoSequence("clown.in")));
     }
 }
-
-class PriorityQueue<T, S extends Comparable<S>> {
-    HeapTree<T, S> tree = new HeapTree<T, S>();
-
-    void enqueue(T item, S priority) {
-        tree.addElement(new PriorityNode<T, S>(item, priority));
-    }
-
-    T dequeue() {
-        return tree.removeMax().getItem();
-    }
-
-    public boolean isEmpty() {
-        return tree.isEmpty();
-    }
-}
-
 
 class HeapTree<T, S extends Comparable<S>>{
     PriorityNode<T, S> root;

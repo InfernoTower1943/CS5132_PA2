@@ -18,6 +18,7 @@ import java.util.*;
 import javafx.util.Pair;
 import main.Main;
 import main.ModulePriorityQueue;
+import main.PriorityFix;
 
 public class Student extends Application{
     private Stage globalStage;
@@ -33,6 +34,8 @@ public class Student extends Application{
     public static String currentModuleCode;
     public static String currentTimeSlot;
     public static Integer currentTimeSlotID;
+    public static boolean signedUp;
+    public static boolean vacant;
     public static ArrayList<Integer> availablePreferences;
     public static boolean required;
     public static int preference;
@@ -142,9 +145,9 @@ public class Student extends Application{
                 modulePQ.enqueueToTimeSlot(module,timeSlotID,args[0],Integer.parseInt(args[1].strip()));
                 System.out.println(args[0]+","+ args[1]);
                 if (args[0].equals(studentID)){
-                    if (availablePreferences.contains(-(Integer.parseInt(args[1].strip()) / 1000) + 1)){
+                    if (availablePreferences.contains((Integer.parseInt(args[1].strip()) / 1000) + 1)){
                         System.out.println("priority: " + args[1].strip());
-                        availablePreferences.remove(Integer.valueOf(-Integer.parseInt(args[1].strip()) / 1000 + 1));
+                        availablePreferences.remove(Integer.valueOf(Integer.parseInt(args[1].strip()) / 1000 + 1));
                     }
                 }
             }
@@ -197,11 +200,10 @@ public class Student extends Application{
                         required = studentsRequiredModules.contains(currentModuleCode);
 
                         if (required){
-                            preference = 100;
+                            preference = 0;
                             studentPreferenceLabel.setVisible(false);
                             studentPreferenceComboBox.setVisible(false);
                         } else {
-                            preference = 0;
                             studentPreferenceLabel.setVisible(true);
                             studentPreferenceComboBox.setVisible(true);
                         }
@@ -217,10 +219,13 @@ public class Student extends Application{
                         currentTimeSlot=timeSlot.getKey();
                         currentTimeSlotID=timeSlot.getValue();
                         int vacancyNumber = timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))));
-                        if (vacancyNumber <= 0) studentVacanciesLabel.setText("Full!");
+                        vacant = vacancyNumber > 0;
+                        if (!vacant) { studentVacanciesLabel.setText("Full, Depends on preference");}
                         else studentVacanciesLabel.setText("Available");
-                        if (required || (!required && !studentPreferenceComboBox.getSelectionModel().isEmpty()))
+
+                        if (required)
                             signUpButton.setDisable(false);
+                        studentPreferenceComboBox.valueProperty().set(null);
                     }
                 }
         );
@@ -229,8 +234,22 @@ public class Student extends Application{
                 (observable, oldValue, newValue) -> {
                     if (newValue != null && !studentPreferenceComboBox.getSelectionModel().isEmpty()) {
                         preference = (Integer) studentPreferenceComboBox.getItems().get((Integer) newValue); // timeslot selection should have been made
-                        if (required || (!required && !studentAvailableTimeSlotsComboBox.getSelectionModel().isEmpty()))
-                            signUpButton.setDisable(false);
+                        if (!vacant){
+                            int vacancy=timeVacancy.get(
+                                    new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
+                                            new Pair<>(currentModuleCode, currentTimeSlotID))));
+                            if (modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID) != null &&
+                                    modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() < modulePQ.getPriority(preference, vacancy)){
+                                if (required || (!required && !studentAvailableTimeSlotsComboBox.getSelectionModel().isEmpty())) {
+                                    signUpButton.setDisable(false);
+                                    studentVacanciesLabel.setText("Available");
+                                }
+                            }
+                        }
+                        else {
+                            if (!studentAvailableTimeSlotsComboBox.getSelectionModel().isEmpty())
+                                signUpButton.setDisable(false);
+                        }
                     }
                 }
         );
@@ -241,17 +260,22 @@ public class Student extends Application{
                 int vacancy=timeVacancy.get(
                         new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
                                 new Pair<>(currentModuleCode, currentTimeSlotID))));
-                modulePQ.enqueueToTimeSlot(currentModuleCode, currentTimeSlotID, studentID,
-                        modulePQ.getPriority(preference, vacancy));
-                timeVacancy.put(new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
-                        new Pair<>(currentModuleCode, currentTimeSlotID))),vacancy-1);
-                availablePreferences.remove(Integer.valueOf(preference));
-                try {
-                    write();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (vacant || (modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID) != null && // if, full checks priority
+                        modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() > modulePQ.getPriority(preference, vacancy))){
+                    if (!vacant)
+                        modulePQ.dequeueFromTimeSlot(currentModuleCode, currentTimeSlotID);
+                    modulePQ.enqueueToTimeSlot(currentModuleCode, currentTimeSlotID, studentID,
+                            modulePQ.getPriority(preference, vacancy));
+                    timeVacancy.put(new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
+                            new Pair<>(currentModuleCode, currentTimeSlotID))),vacancy-1);
+                    availablePreferences.remove(Integer.valueOf(preference));
+                    try {
+                        write();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    signUpButton.setDisable(true);
                 }
-                signUpButton.setDisable(true);
             }
         });
 
