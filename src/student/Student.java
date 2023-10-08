@@ -138,7 +138,9 @@ public class Student extends Application{
             for (int i=0; i<count;i++){
                 line = scanner.next();
                 args = line.split(",");
+                System.out.println(args[0]+","+ args[1]);
                 modulePQ.enqueueToTimeSlot(module,timeSlotID,args[0],Integer.parseInt(args[1].strip()));
+                System.out.println(args[0]+","+ args[1]);
                 if (args[0].equals(studentID)){
                     if (availablePreferences.contains(-(Integer.parseInt(args[1].strip()) / 1000) + 1)){
                         System.out.println("priority: " + args[1].strip());
@@ -255,6 +257,7 @@ public class Student extends Application{
             @Override
             public void handle(ActionEvent event) {
                 try {
+                    reset();
                     new Main().start(globalStage);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -286,5 +289,14 @@ public class Student extends Application{
             }
         }
         outputStream.close();
+    }
+    public static void reset(){
+        modulePQ = new ModulePriorityQueue<String, Integer>();
+        moduleSet = new TreeSet<String>();
+        moduleDetails = new HashMap<>();
+        moduleDescriptions = new HashMap<>();
+        studentsRequiredModules = new TreeSet<String>();
+        timeVacancy= new HashMap<>();
+        timeTotal= new HashMap<>();
     }
 }
