@@ -96,8 +96,6 @@ public class Student extends Application{
             timeTotal.put(new Pair<String, String>(args[0],
                             modulePQ.timeSlotDescriptionMap.get(new Pair<>(args[0], Integer.parseInt(args[1])))),
                     Integer.parseInt(args[4].strip()));
-            System.out.println(timeVacancy.get(new Pair<>(args[0], modulePQ.timeSlotDescriptionMap.get(new Pair<>(args[0], Integer.parseInt(args[1]))))));
-
         }
         scanner.close();
 
@@ -143,15 +141,11 @@ public class Student extends Application{
             for (int i=0; i<count;i++){
                 line = scanner.next();
                 args = line.split(",");
-                System.out.println(args[0]+","+ args[1]);
                 modulePQ.enqueueToTimeSlot(module,timeSlotID,args[0],Integer.parseInt(args[1].strip()));
-                System.out.println(args[0]+","+ args[1]);
                 if (args[0].equals(studentID)){
                     if (availablePreferences.contains((Integer.parseInt(args[1].strip()) / 1000) + 1)){
-                        System.out.println("priority: " + args[1].strip());
                         availablePreferences.remove(Integer.valueOf(Integer.parseInt(args[1].strip()) / 1000 + 1));
                     } if (!registeredModules.containsKey(module)) {
-                        System.out.println(module + ": " + (Integer.parseInt(args[1].strip()) / 1000 + 1));
                         registeredModules.put(module, new Pair(timeSlotID, (Integer.parseInt(args[1].strip()) / 1000) + 1));
                     }
                 }
@@ -181,7 +175,6 @@ public class Student extends Application{
                     signUpButton.setDisable(true);
 
                     if (newValue != null) {
-                        //System.out.println("Selected Item: " + newValue);
                         // Update choice box
                         String moduleCode = (String) newValue;
                         registered = registeredModules.containsKey(moduleCode);

@@ -158,7 +158,6 @@ public class Admin extends Application{
             String[] args = line.split(",");
             String module=args[0];
             int timeSlotID=Integer.parseInt(args[1].strip());
-            System.out.println(line + args[0] + args[1]);
             long count=Long.parseLong(args[2].strip());
             for (int i=0; i<count;i++){
                 line = scanner.next();
@@ -394,10 +393,7 @@ public class Admin extends Application{
                     PQView.moduleCode = adminModuleCodeTextBox.getText();
                     PQView.timeSlot = ""+adminAvailableTimeSlotsComboBox.getValue();
                     ArrayList<Integer> currentModuleAllTimeSlots = new ArrayList<>(modulePQ.getTimeSlotIDs(selectedModule));
-                    System.out.println(PQView.timeSlot);
                     for (Integer timeSlotID : currentModuleAllTimeSlots) {
-                        System.out.println(PQView.moduleCode + " " + timeSlotID);
-                        System.out.println(modulePQ.timeSlotDescriptionMap.get(new Pair(PQView.moduleCode, timeSlotID)));
                         if (modulePQ.timeSlotDescriptionMap.get(new Pair(PQView.moduleCode, timeSlotID)).equals(PQView.timeSlot)){
                             try {
                                 PQView.studentID = (String) modulePQ.getTimeSlotPQ(selectedModule, timeSlotID).top().getItem();
@@ -438,14 +434,17 @@ public class Admin extends Application{
     public static void removePQTop(){
         ArrayList<Integer> currentModuleAllTimeSlots = new ArrayList<>(modulePQ.getTimeSlotIDs(selectedModule));
         for (Integer timeSlotID : currentModuleAllTimeSlots) {
-            System.out.println(PQView.moduleCode + " " + timeSlotID);
-            System.out.println(modulePQ.timeSlotDescriptionMap.get(new Pair(PQView.moduleCode, timeSlotID)));
             if (modulePQ.timeSlotDescriptionMap.get(new Pair(PQView.moduleCode, timeSlotID)).equals(PQView.timeSlot)){
                 try {
                     String student = modulePQ.getTimeSlotPQ(selectedModule, timeSlotID).dequeue();
                     Alert a = new Alert(Alert.AlertType.CONFIRMATION);
                     a.setHeaderText("Dequeued student " + student + "!");
                     a.show();
+                    timeVacancy.put(
+                            new Pair<>(PQView.moduleCode, modulePQ.timeSlotDescriptionMap.get(
+                                    new Pair<>(PQView.moduleCode, timeSlotID))), timeVacancy.get(
+                                    new Pair<>(PQView.moduleCode, modulePQ.timeSlotDescriptionMap.get(
+                                            new Pair<>(PQView.moduleCode, timeSlotID))))+1);
                     write();
                 }catch(Exception e){
                     e.printStackTrace();

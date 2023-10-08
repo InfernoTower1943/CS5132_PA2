@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class PQView extends Application {
     @FXML
@@ -41,6 +42,11 @@ public class PQView extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Admin.removePQTop();
+                Window window = removeTopButton.getScene().getWindow();
+
+                if (window instanceof Stage){
+                    ((Stage) window).close();
+                }
             }
         });
 
