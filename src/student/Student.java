@@ -18,7 +18,6 @@ import java.util.*;
 import javafx.util.Pair;
 import main.Main;
 import main.ModulePriorityQueue;
-import main.PriorityFix;
 
 public class Student extends Application{
     private Stage globalStage;
@@ -34,7 +33,8 @@ public class Student extends Application{
     public static String currentModuleCode;
     public static String currentTimeSlot;
     public static Integer currentTimeSlotID;
-    public static boolean signedUp;
+    public static Map<String, Pair<Integer, Integer>> registeredModules;
+    public static boolean registered;
     public static boolean vacant;
     public static ArrayList<Integer> availablePreferences;
     public static boolean required;
@@ -81,6 +81,7 @@ public class Student extends Application{
         Parent root = loader.load();
 
         Scene scene = new Scene(root, 1200, 800);
+        reset();
 
         Scanner scanner = new Scanner(new File("ModulesAndTimeSlots.txt"));
         scanner.useDelimiter("\n");
@@ -123,7 +124,8 @@ public class Student extends Application{
         }
         scanner.close();
 
-        availablePreferences = new ArrayList<>(); // allow for up to 5 additional non-compulsory modules to be taken
+        // allow for up to 5 additional non-compulsory modules to be taken
+        availablePreferences = new ArrayList<>();
         availablePreferences.add(1);
         availablePreferences.add(2);
         availablePreferences.add(3);
@@ -148,6 +150,9 @@ public class Student extends Application{
                     if (availablePreferences.contains((Integer.parseInt(args[1].strip()) / 1000) + 1)){
                         System.out.println("priority: " + args[1].strip());
                         availablePreferences.remove(Integer.valueOf(Integer.parseInt(args[1].strip()) / 1000 + 1));
+                    } if (!registeredModules.containsKey(module)) {
+                        System.out.println(module + ": " + (Integer.parseInt(args[1].strip()) / 1000 + 1));
+                        registeredModules.put(module, new Pair(timeSlotID, (Integer.parseInt(args[1].strip()) / 1000) + 1));
                     }
                 }
             }
@@ -179,19 +184,21 @@ public class Student extends Application{
                         //System.out.println("Selected Item: " + newValue);
                         // Update choice box
                         String moduleCode = (String) newValue;
+                        registered = registeredModules.containsKey(moduleCode);
+
                         studentAvailableTimeSlotsComboBox.getItems().clear();
-                        for (Integer timeSlotID : modulePQ.getTimeSlotIDs(moduleCode)){
+                        for (Integer timeSlotID : modulePQ.getTimeSlotIDs(moduleCode)) {
                             studentAvailableTimeSlotsComboBox.getItems().add(modulePQ.getTimeSlot(moduleCode, timeSlotID));
                         }
 
                         // Update preference box
                         studentPreferenceComboBox.getItems().clear();
-                        for (Integer preference : availablePreferences){
+                        for (Integer preference : availablePreferences) {
                             studentPreferenceComboBox.getItems().add(preference);
                         }
 
                         // set module title label
-                        currentModuleCode=moduleCode;
+                        currentModuleCode = moduleCode;
                         studentModuleTitleLabel.setText(moduleDetails.get(moduleCode));
                         // set module code label
                         studentModuleCodeLabel.setText(moduleCode);
@@ -199,7 +206,7 @@ public class Student extends Application{
                         moduleDescriptionTextBox.setText(moduleDescriptions.get(moduleCode));
                         required = studentsRequiredModules.contains(currentModuleCode);
 
-                        if (required){
+                        if (required) {
                             preference = 0;
                             studentPreferenceLabel.setVisible(false);
                             studentPreferenceComboBox.setVisible(false);
@@ -207,14 +214,27 @@ public class Student extends Application{
                             studentPreferenceLabel.setVisible(true);
                             studentPreferenceComboBox.setVisible(true);
                         }
+
+
+                        if (!registered) {
+                            studentAvailableTimeSlotsComboBox.setDisable(false);
+                            studentPreferenceComboBox.setDisable(false);
+                            studentPreferenceComboBox.valueProperty().set(null);
+                        } else {
+                            studentAvailableTimeSlotsComboBox.setDisable(true);
+                            studentPreferenceComboBox.setDisable(true);
+                            currentTimeSlotID = registeredModules.get(moduleCode).getKey();
+                            studentAvailableTimeSlotsComboBox.valueProperty().set(modulePQ.getTimeSlot(moduleCode, currentTimeSlotID));
+                            studentPreferenceComboBox.valueProperty().set(registeredModules.get(moduleCode).getValue());
+                        }
                     }
                 });
 
-        // TODO: Based on available preferences, load the data for studentPreferenceComboBox
-
         studentAvailableTimeSlotsComboBox.getSelectionModel().selectedIndexProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    if (newValue != null && !studentAvailableTimeSlotsComboBox.getSelectionModel().isEmpty()) {
+                    if (registered){
+                        signUpButton.setDisable(true);
+                    } else if (newValue != null && !studentAvailableTimeSlotsComboBox.getSelectionModel().isEmpty()) {
                         Pair<String, Integer> timeSlot = modulePQ.getTimeSlotIDFromStr((String) (studentAvailableTimeSlotsComboBox.getItems().get((Integer) newValue)));
                         currentTimeSlot=timeSlot.getKey();
                         currentTimeSlotID=timeSlot.getValue();
@@ -238,7 +258,7 @@ public class Student extends Application{
                             int vacancy=timeVacancy.get(
                                     new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
                                             new Pair<>(currentModuleCode, currentTimeSlotID))));
-                            if (modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID) != null &&
+                            if (modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() != null &&
                                     modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() < modulePQ.getPriority(preference, vacancy)){
                                 if (required || (!required && !studentAvailableTimeSlotsComboBox.getSelectionModel().isEmpty())) {
                                     signUpButton.setDisable(false);
@@ -260,7 +280,7 @@ public class Student extends Application{
                 int vacancy=timeVacancy.get(
                         new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
                                 new Pair<>(currentModuleCode, currentTimeSlotID))));
-                if (vacant || (modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID) != null && // if, full checks priority
+                if (vacant || (modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() != null && // if, full checks priority
                         modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() > modulePQ.getPriority(preference, vacancy))){
                     if (!vacant)
                         modulePQ.dequeueFromTimeSlot(currentModuleCode, currentTimeSlotID);
@@ -268,7 +288,9 @@ public class Student extends Application{
                             modulePQ.getPriority(preference, vacancy));
                     timeVacancy.put(new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
                             new Pair<>(currentModuleCode, currentTimeSlotID))),vacancy-1);
+
                     availablePreferences.remove(Integer.valueOf(preference));
+                    registeredModules.put(currentModuleCode, new Pair(currentTimeSlotID, preference));
                     try {
                         write();
                     } catch (IOException e) {
@@ -328,7 +350,9 @@ public class Student extends Application{
         moduleDetails = new HashMap<>();
         moduleDescriptions = new HashMap<>();
         studentsRequiredModules = new TreeSet<String>();
+        registeredModules = new HashMap<>();
         timeVacancy= new HashMap<>();
         timeTotal= new HashMap<>();
+        availablePreferences = new ArrayList<>();
     }
 }
