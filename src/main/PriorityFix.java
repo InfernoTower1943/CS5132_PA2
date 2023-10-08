@@ -143,10 +143,11 @@ class HeapTree<T, S extends Comparable<S>>{
 
     void shiftUp(PriorityNode<T, S> node){
         PriorityNode<T, S> curr = node;
-        while (curr.getParent() != null && curr.getParent().getPriority().compareTo(curr.getPriority()) < 0){
+        while (curr.getParent() != null && curr.getParent().getPriority().compareTo(curr.getPriority()) > 0){
             // swap curr and curr parent
             curr = curr.swapWithParent();
         }
+
     }
 
     void shiftDown(PriorityNode<T, S> node){

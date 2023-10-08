@@ -143,9 +143,16 @@ public class Student extends Application{
                 args = line.split(",");
                 modulePQ.enqueueToTimeSlot(module,timeSlotID,args[0],Integer.parseInt(args[1].strip()));
                 if (args[0].equals(studentID)){
-                    if (availablePreferences.contains((Integer.parseInt(args[1].strip()) / 1000) + 1)){
-                        availablePreferences.remove(Integer.valueOf(Integer.parseInt(args[1].strip()) / 1000 + 1));
-                    } if (!registeredModules.containsKey(module)) {
+                    if (Integer.parseInt(args[1].strip()) > 0) {
+                        if (availablePreferences.contains((Integer.parseInt(args[1].strip()) / 1000) + 1)) {
+                            availablePreferences.remove(Integer.valueOf(Integer.parseInt(args[1].strip()) / 1000 + 1));
+                        }
+                        if (!registeredModules.containsKey(module)) {
+                            registeredModules.put(module, new Pair(timeSlotID, (Integer.parseInt(args[1].strip()) / 1000) + 1));
+                        }
+                    }
+                    availablePreferences.remove(Integer.valueOf(Integer.parseInt(args[1].strip()) / 1000 + 1));
+                    if (!registeredModules.containsKey(module)) {
                         registeredModules.put(module, new Pair(timeSlotID, (Integer.parseInt(args[1].strip()) / 1000) + 1));
                     }
                 }
@@ -169,6 +176,7 @@ public class Student extends Application{
         signUpButton = (Button) loader.getNamespace().get("signUpButton");
 
         // TODO: If have previously stored data, load it and prevent user from editing.
+        signUpButton.setDisable(true);
 
         studentModulesAvailableListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -279,6 +287,7 @@ public class Student extends Application{
                         modulePQ.dequeueFromTimeSlot(currentModuleCode, currentTimeSlotID);
                     modulePQ.enqueueToTimeSlot(currentModuleCode, currentTimeSlotID, studentID,
                             modulePQ.getPriority(preference, vacancy));
+
                     timeVacancy.put(new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
                             new Pair<>(currentModuleCode, currentTimeSlotID))),vacancy-1);
 

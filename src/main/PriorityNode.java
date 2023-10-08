@@ -76,7 +76,7 @@ public class PriorityNode<T, S extends Comparable<S>> {
         this.item = parent.item;
         this.priority = parent.priority;
         parent.setItem(tempItem);
-        parent.setPriority(priority);
+        parent.setPriority(tempPriority);
         return parent;
     }
 
