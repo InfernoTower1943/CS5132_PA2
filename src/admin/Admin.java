@@ -440,11 +440,6 @@ public class Admin extends Application{
                     Alert a = new Alert(Alert.AlertType.CONFIRMATION);
                     a.setHeaderText("Dequeued student " + student + "!");
                     a.show();
-                    timeVacancy.put(
-                            new Pair<>(PQView.moduleCode, modulePQ.timeSlotDescriptionMap.get(
-                                    new Pair<>(PQView.moduleCode, timeSlotID))), timeVacancy.get(
-                                    new Pair<>(PQView.moduleCode, modulePQ.timeSlotDescriptionMap.get(
-                                            new Pair<>(PQView.moduleCode, timeSlotID))))+1);
                     write();
                 }catch(Exception e){
                     e.printStackTrace();
