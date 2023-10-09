@@ -59,7 +59,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="studentModuleDetailsVBox" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Main">
+<VBox fx:id="studentModuleDetailsVBox" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Main">
   <children>
     <MenuBar prefWidth="911.0" VBox.vgrow="NEVER">
       <menus>
@@ -213,12 +213,6 @@
                                     <TextField fx:id="adminModuleTitleTextBox" editable="false" GridPane.columnIndex="1" />
                                     <TextField fx:id="adminModuleCodeTextBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <TextField fx:id="adminTotalSpotsTextBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <Label text="Non-required Penalty" GridPane.rowIndex="3">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="adminPenaltyTextBox" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                  </children>
                               </GridPane>
                               <ButtonBar prefHeight="40.0" prefWidth="185.0">

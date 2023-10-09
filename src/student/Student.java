@@ -145,9 +145,9 @@ public class Student extends Application{
                 if (args[0].equals(studentID)){
                     int pref = 0;
                     if (Integer.parseInt(args[1].strip()) > 0) {
-                        pref = (Integer.parseInt(args[1].strip()) / 1000) + 1;
-                        if (availablePreferences.contains(pref)){
-                            availablePreferences.remove(pref);
+                        pref = ((Integer.parseInt(args[1].strip()) - 1) / 1000) + 1;
+                        if (availablePreferences.contains(Integer.valueOf(pref))){
+                            availablePreferences.remove(Integer.valueOf(pref));
                         }
                     }
                     if (!registeredModules.containsKey(module)) {
@@ -240,7 +240,7 @@ public class Student extends Application{
                         int vacancyNumber = timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))));
                         vacant = vacancyNumber > 0;
                         if (!vacant) { studentVacanciesLabel.setText("Full, Depends on preference"); signUpButton.setDisable(true);}
-                        else {studentVacanciesLabel.setText("Available"); signUpButton.setDisable(false);}
+                        else {studentVacanciesLabel.setText("Available");}
 
                         if (required)
                             signUpButton.setDisable(false);
@@ -254,15 +254,20 @@ public class Student extends Application{
                     if (newValue != null && !studentPreferenceComboBox.getSelectionModel().isEmpty()) {
                         preference = (Integer) studentPreferenceComboBox.getItems().get((Integer) newValue); // timeslot selection should have been made
                         if (!vacant){
-                            int vacancy=timeVacancy.get(
-                                    new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
-                                            new Pair<>(currentModuleCode, currentTimeSlotID))));
+                            int vacancy = timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))));
                             if (modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() != null &&
-                                    modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() < modulePQ.getPriority(preference, vacancy)){
+                                    modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() > modulePQ.getPriority(preference, vacancy)){
                                 if (required || (!required && !studentAvailableTimeSlotsComboBox.getSelectionModel().isEmpty())) {
                                     signUpButton.setDisable(false);
                                     studentVacanciesLabel.setText("Available");
                                 }
+                                else{
+                                    studentVacanciesLabel.setText("Full, Depends on preference");
+                                }
+                            }
+                            else{
+                                signUpButton.setDisable(true);
+                                studentVacanciesLabel.setText("Full, Depends on preference");
                             }
                         }
                         else {
@@ -276,9 +281,7 @@ public class Student extends Application{
         signUpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                int vacancy=timeVacancy.get(
-                        new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
-                                new Pair<>(currentModuleCode, currentTimeSlotID))));
+                int vacancy = timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID))));
                 if (vacant || (modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() != null && // if, full checks priority
                         modulePQ.getModulePQ(currentModuleCode).get(currentTimeSlotID).peek() > modulePQ.getPriority(preference, vacancy))){
                     if (!vacant)
@@ -287,7 +290,9 @@ public class Student extends Application{
                             modulePQ.getPriority(preference, vacancy));
                     timeVacancy.put(new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
                             new Pair<>(currentModuleCode, currentTimeSlotID))),vacancy-1);
-
+                    System.out.println(vacancy);
+                    System.out.println(modulePQ.getPriority(preference, vacancy));
+                    System.out.println(timeVacancy.get(new Pair<>(currentModuleCode,modulePQ.timeSlotDescriptionMap.get(new Pair<>(currentModuleCode, currentTimeSlotID)))));
                     availablePreferences.remove(Integer.valueOf(preference));
                     registeredModules.put(currentModuleCode, new Pair(currentTimeSlotID, preference));
                     try {

@@ -7,13 +7,13 @@ CS2100,5,Monday 2pm-3pm,26,26
 CS2100,6,Monday 3pm-4pm,28,28
 CS2100,7,Monday 4pm-5pm,29,29
 EL5131,0,Friday 4pm-5pm,5000,5000
-HA6969,0,Thursday 4pm-5pm,3,3
+HA6969,0,Thursday 4pm-5pm,-1,3
 HE1100,0,Wednesday 4pm-5pm,98,98
 ME2100,0,Tuesday 9am-10am,7,7
 ME2100,1,Tuesday 10am-11am,7,7
 ME2100,2,Tuesday 11am-12pm,7,7
 ME2100,3,Tuesday 12pm-1pm,7,7
 ME2100,4,Tuesday 1pm-2pm,7,7
-ME2100,5,Tuesday 2pm-3pm,7,7
-ME2100,6,Tuesday 3pm-4pm,7,7
+ME2100,5,Tuesday 2pm-3pm,6,7
+ME2100,6,Tuesday 3pm-4pm,5,7
 ME2100,7,Tuesday 4pm-5pm,7,7

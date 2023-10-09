@@ -1,0 +1,13 @@
+CS2100,2,1
+student1,-23
+EL5131,0,2
+student1,2700
+student2,1701
+HA6969,0,1
+student4,1000
+ME2100,5,1
+student4,4993
+ME2100,6,3
+student4,3993
+student1,-7
+student3,3993

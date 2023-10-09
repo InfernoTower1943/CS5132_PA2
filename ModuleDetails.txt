@@ -1,5 +1,5 @@
-CS2100,Computer Organisation,456,222222222222222
-EL5131,Hell,4,dont join this module pls value your brain cells dont sign up dont sign up dont sign up
-HA6969,Clown Module,999,Hahaha 69 so funny!
-HE1100,Helium Tomfoolery,219,Hydrogen Sucks!
-ME2100,Methamphetamine Studies 2,592,Explain why Jingliu is made out of Hydrogen Peroxide
+CS2100,Computer Organisation,222222222222222
+EL5131,Hell,dont join this module pls value your brain cells dont sign up dont sign up dont sign up
+HA6969,Clown Module,Hahaha 69 so funny!
+HE1100,Helium Tomfoolery,Hydrogen Sucks!
+ME2100,Methamphetamine Studies 2,Explain why Jingliu is made out of Hydrogen Peroxide

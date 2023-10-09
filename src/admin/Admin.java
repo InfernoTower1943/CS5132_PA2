@@ -29,7 +29,7 @@ public class Admin extends Application{
     public static SortedSet<String> moduleSet = new TreeSet<String>();
     public static Map<String, String> moduleTitles = new HashMap<>();
     public static Map<String, String> moduleDescriptions = new HashMap<>();
-    public static Map<String, Integer> modulePreferencePenalties = new HashMap<>();
+    //public static Map<String, Integer> modulePreferencePenalties = new HashMap<>();
 
     public static Map<Pair<String, String>, Integer> timeVacancy= new HashMap<>();
     public static Map<Pair<String, String>, Integer> timeTotal= new HashMap<>();
@@ -69,8 +69,8 @@ public class Admin extends Application{
     TextField adminModuleCodeTextBox;
     @FXML
     TextField adminTotalSpotsTextBox;
-    @FXML
-    TextField adminPenaltyTextBox;
+    //@FXML
+    //TextField adminPenaltyTextBox;
     @FXML
     TextArea moduleDescriptionTextBox;
 
@@ -133,8 +133,8 @@ public class Admin extends Application{
             String line = scanner.nextLine();
             String[] args = line.split(",", 4);
             moduleTitles.put(args[0], args[1]);
-            modulePreferencePenalties.put(args[0], Integer.parseInt(args[2]));
-            moduleDescriptions.put(args[0], args[3]);
+            //modulePreferencePenalties.put(args[0], Integer.parseInt(args[2]));
+            moduleDescriptions.put(args[0], args[2]);
         }
         scanner.close();
 
@@ -189,7 +189,7 @@ public class Admin extends Application{
 
         // TODO: make total spots text box numeric only
         adminTotalSpotsTextBox = (TextField) loader.getNamespace().get("adminTotalSpotsTextBox");
-        adminPenaltyTextBox = (TextField) loader.getNamespace().get("adminPenaltyTextBox");
+        //adminPenaltyTextBox = (TextField) loader.getNamespace().get("adminPenaltyTextBox");
         moduleDescriptionTextBox = (TextArea) loader.getNamespace().get("moduleDescriptionTextBox");
         timeSlotEditButton = (Button) loader.getNamespace().get("timeSlotEditButton");
         timeSlotSaveButton = (Button) loader.getNamespace().get("timeSlotSaveButton");
@@ -223,7 +223,7 @@ public class Admin extends Application{
                         moduleDescriptionTextBox.setText(moduleDescriptions.get(selectedModule));
 
                         adminTotalSpotsTextBox.setText("");
-                        adminPenaltyTextBox.setText(Integer.toString(modulePreferencePenalties.get(selectedModule)));
+                        //adminPenaltyTextBox.setText(Integer.toString(modulePreferencePenalties.get(selectedModule)));
                     }
                 });
 
@@ -274,7 +274,7 @@ public class Admin extends Application{
                 adminModuleTitleTextBox.setEditable(true);
                 adminModuleCodeTextBox.setEditable(true);
                 adminTotalSpotsTextBox.setEditable(true);
-                adminPenaltyTextBox.setEditable(true);
+                //adminPenaltyTextBox.setEditable(true);
                 timeSlotEditButton.setDisable(true);
                 timeSlotSaveButton.setDisable(false);
             }
@@ -287,7 +287,7 @@ public class Admin extends Application{
                 adminModuleTitleTextBox.setEditable(false);
                 adminModuleCodeTextBox.setEditable(false);
                 adminTotalSpotsTextBox.setEditable(false);
-                adminPenaltyTextBox.setEditable(false);
+                //adminPenaltyTextBox.setEditable(false);
                 timeSlotEditButton.setDisable(false);
                 timeSlotSaveButton.setDisable(true);
                 moduleTitles.remove(selectedModule);
@@ -296,7 +296,7 @@ public class Admin extends Application{
                 String moduleCode = adminModuleCodeTextBox.getText();
                 String selectedTimeSlot = adminAvailableTimeSlotsComboBox.getValue().toString();
                 Integer totalSpots = Integer.valueOf(-1);
-                Integer penalty = Integer.valueOf(-1);
+                //Integer penalty = Integer.valueOf(-1);
                 try {
                     totalSpots = Integer.parseInt(adminTotalSpotsTextBox.getText());
                 } catch (NumberFormatException e) {
@@ -304,7 +304,7 @@ public class Admin extends Application{
                     System.out.println(e);
                 }
                 try {
-                    penalty = Integer.parseInt(adminPenaltyTextBox.getText());
+                    //penalty = Integer.parseInt(adminPenaltyTextBox.getText());
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     System.out.println(e);
@@ -314,9 +314,9 @@ public class Admin extends Application{
                     timeTotal.remove(new Pair<>(moduleCode, selectedTimeSlot));
                     timeTotal.put(new Pair<>(moduleCode, selectedTimeSlot), totalSpots);
                 }
-                if (penalty != -1){
-                    modulePreferencePenalties.put(moduleCode, penalty);
-                }
+                //if (penalty != -1){
+                //    modulePreferencePenalties.put(moduleCode, penalty);
+                //}
 
                 moduleTitles.put(moduleCode,moduleTitle);
                 moduleSet.remove(selectedModule);
@@ -397,6 +397,7 @@ public class Admin extends Application{
                         if (modulePQ.timeSlotDescriptionMap.get(new Pair(PQView.moduleCode, timeSlotID)).equals(PQView.timeSlot)){
                             try {
                                 PQView.studentID = (String) modulePQ.getTimeSlotPQ(selectedModule, timeSlotID).top().getItem();
+                                PQView.pref = "" + (((Integer) modulePQ.getTimeSlotPQ(selectedModule, timeSlotID).top().getPriority() / 1000) + 1 );
                             }catch(Exception e){
                                 Alert a = new Alert(Alert.AlertType.WARNING);
                                 a.setHeaderText("Priority Queue is Empty!");
@@ -405,7 +406,6 @@ public class Admin extends Application{
                             }
                         }
                     }
-                    PQView.pref = "TODO";
 
                     if (flag) new PQView().start(new Stage());
                 } catch (Exception e) {
@@ -453,7 +453,7 @@ public class Admin extends Application{
         FileWriter outputStream1 = new FileWriter(System.getProperty("user.dir")+"/"+"ModulesAndTimeSlots.txt");
         FileWriter outputStream2 = new FileWriter(System.getProperty("user.dir")+"/"+"ModulePriorityQueue.txt");
         for (String moduleCode : moduleSet) {
-            outputStream.write(moduleCode + "," + moduleTitles.get(moduleCode) + "," + (modulePreferencePenalties.get(moduleCode)) + "," + moduleDescriptions.get(moduleCode)+"\n");
+            outputStream.write(moduleCode + "," + moduleTitles.get(moduleCode) + "," + moduleDescriptions.get(moduleCode)+"\n");
             ArrayList<Integer> currentModuleAllTimeSlots = new ArrayList<>(modulePQ.getTimeSlotIDs(moduleCode));
             for (Integer timeSlotID : currentModuleAllTimeSlots) {
                     if (!modulePQ.PQIsEmpty(modulePQ.getTimeSlotPQ(moduleCode,timeSlotID))){

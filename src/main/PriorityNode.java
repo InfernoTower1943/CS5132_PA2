@@ -86,7 +86,7 @@ public class PriorityNode<T, S extends Comparable<S>> {
         this.item = left.item;
         this.priority = left.priority;
         left.setItem(tempItem);
-        left.setPriority(priority);
+        left.setPriority(tempPriority);
         return left;
     }
 
@@ -96,7 +96,7 @@ public class PriorityNode<T, S extends Comparable<S>> {
         this.item = right.item;
         this.priority = right.priority;
         right.setItem(tempItem);
-        right.setPriority(priority);
+        right.setPriority(tempPriority);
         return right;
     }
 

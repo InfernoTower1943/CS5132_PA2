@@ -117,6 +117,5 @@ public class Main extends Application {
         globalStage.setScene(scene);
         globalStage.show();
 
-
     }
 }
