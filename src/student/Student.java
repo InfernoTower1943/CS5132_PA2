@@ -56,6 +56,8 @@ public class Student extends Application{
     @FXML
     Label studentPreferenceLabel;
     @FXML
+    Label requiredLabel;
+    @FXML
     ComboBox studentPreferenceComboBox;
 
     @FXML
@@ -108,20 +110,6 @@ public class Student extends Application{
         }
         scanner.close();
 
-        studentRequiredModulesListView = (ListView) loader.getNamespace().get("studentRequiredModulesListView");
-        scanner = new Scanner(new File("StudentRequiredModules.txt"));
-        while(scanner.hasNextLine()){
-            String line = scanner.nextLine();
-            String[] args = line.split(",");
-            if (args[0].equals(studentID)){
-                for (int i=1; i<args.length; i++) {
-                    studentsRequiredModules.add(args[i]);
-                    studentRequiredModulesListView.getItems().add(args[i]);
-                }
-            }
-        }
-        scanner.close();
-
         // allow for up to 5 additional non-compulsory modules to be taken
         availablePreferences = new ArrayList<>();
         availablePreferences.add(1);
@@ -154,6 +142,32 @@ public class Student extends Application{
                         registeredModules.put(module, new Pair(timeSlotID, pref));
                     }
 
+                }
+            }
+        }
+        scanner.close();
+
+
+        studentRequiredModulesListView = (ListView) loader.getNamespace().get("studentRequiredModulesListView");
+        requiredLabel = (Label) loader.getNamespace().get("requiredLabel");
+        requiredLabel.setVisible(false);
+        scanner = new Scanner(new File("StudentRequiredModules.txt"));
+        while(scanner.hasNextLine()){
+            String line = scanner.nextLine();
+            String[] args = line.split(",");
+            if (args[0].equals(studentID)){
+                for (int i=1; i<args.length; i++) {
+                    studentsRequiredModules.add(args[i]);
+                    studentRequiredModulesListView.getItems().add(args[i]);
+                    boolean missed=true;
+                    for (Integer integer:modulePQ.getTimeSlotIDs(args[i])){
+                        if (modulePQ.checkPlaceInTimeSlot(args[i],integer,studentID)){
+                            missed=false;
+                        }
+                    }
+                    if (missed){
+                        requiredLabel.setVisible(true);
+                    }
                 }
             }
         }
@@ -362,4 +376,22 @@ public class Student extends Application{
         timeTotal= new HashMap<>();
         availablePreferences = new ArrayList<>();
     }
+    /*
+    public static boolean check(){
+        for (int i=1; i<args.length; i++) {
+            studentsRequiredModules.add(args[i]);
+            studentRequiredModulesListView.getItems().add(args[i]);
+            boolean missed=true;
+            for (Integer integer:modulePQ.getTimeSlotIDs(args[i])){
+                if (modulePQ.checkPlaceInTimeSlot(args[i],integer,studentID)){
+                    missed=false;
+                }
+            }
+            if (missed){
+                requiredLabel.setVisible(true);
+            }
+        }
+    }
+
+     */
 }

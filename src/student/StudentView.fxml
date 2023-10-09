@@ -58,7 +58,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="studentModuleDetailsVBox" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="student.Student">
+<VBox fx:id="studentModuleDetailsVBox" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="student.Student">
   <children>
     <MenuBar prefWidth="911.0" VBox.vgrow="NEVER">
       <menus>
@@ -230,7 +230,7 @@
                                     <VBox prefWidth="100.0">
                                        <children>
                                           <ListView fx:id="studentRequiredModulesListView" prefWidth="200.0" />
-                                          <Label text="Some required modules have not been signed up for!" textFill="RED">
+                                          <Label fx:id="requiredLabel" text="Some required modules have not been signed up for!" textFill="RED">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
