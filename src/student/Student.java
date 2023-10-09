@@ -188,6 +188,12 @@ public class Student extends Application{
         logoutButton = (Button) loader.getNamespace().get("logoutButton");
         signUpButton = (Button) loader.getNamespace().get("signUpButton");
 
+        if (!check()){
+            requiredLabel.setVisible(false);
+        } else {
+            requiredLabel.setVisible(true);
+        }
+
         // TODO: If have previously stored data, load it and prevent user from editing.
 
         studentModulesAvailableListView.getSelectionModel().selectedItemProperty().addListener(
@@ -317,6 +323,11 @@ public class Student extends Application{
                     timeVacancy.put(
                             new Pair<>(currentModuleCode, modulePQ.timeSlotDescriptionMap.get(
                                     new Pair<>(currentModuleCode, currentTimeSlotID))), vacancy-1);
+                    if (!check()){
+                        requiredLabel.setVisible(false);
+                    } else {
+                        requiredLabel.setVisible(true);
+                    }
                     signUpButton.setDisable(true);
                 }
             }
@@ -376,22 +387,18 @@ public class Student extends Application{
         timeTotal= new HashMap<>();
         availablePreferences = new ArrayList<>();
     }
-    /*
+
+
     public static boolean check(){
-        for (int i=1; i<args.length; i++) {
-            studentsRequiredModules.add(args[i]);
-            studentRequiredModulesListView.getItems().add(args[i]);
-            boolean missed=true;
-            for (Integer integer:modulePQ.getTimeSlotIDs(args[i])){
-                if (modulePQ.checkPlaceInTimeSlot(args[i],integer,studentID)){
-                    missed=false;
-                }
-            }
-            if (missed){
-                requiredLabel.setVisible(true);
+        boolean missed=false;
+        for (String module: studentsRequiredModules) {
+            if (!registeredModules.containsKey(module)){
+                missed=true;
+                break;
             }
         }
+        return missed;
     }
 
-     */
+
 }

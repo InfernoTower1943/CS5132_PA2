@@ -312,8 +312,8 @@ public class Admin extends Application{
                 }
 
                 if (totalSpots != -1){
-                    timeTotal.remove(new Pair<>(moduleCode, selectedTimeSlot));
                     timeTotal.put(new Pair<>(moduleCode, selectedTimeSlot), totalSpots);
+                    timeVacancy.put(new Pair<>(moduleCode, selectedTimeSlot),totalSpots);
                 }
                 //if (penalty != -1){
                 //    modulePreferencePenalties.put(moduleCode, penalty);
@@ -322,16 +322,14 @@ public class Admin extends Application{
                 moduleTitles.put(moduleCode,moduleTitle);
                 moduleSet.remove(selectedModule);
                 moduleSet.add(moduleCode);
+                Integer timeSlotID=modulePQ.getTimeSlotIDFromStr(selectedTimeSlot).getValue();
+                String timeSlotDescription=modulePQ.getTimeSlot(selectedModule,timeSlotID);
+                modulePQ.deleteTimeSlot(selectedModule,timeSlotID);
+                modulePQ.addTimeSlot(moduleCode,timeSlotID,timeSlotDescription);
 
                 adminAllModulesListView.getItems().clear();
                 adminAllModulesListView.getItems().addAll(moduleSet);
 
-                ArrayList<Integer> selectedModuleAllTimeSlots =new ArrayList<>(modulePQ.getTimeSlotIDs(selectedModule));
-                for (Integer timeSlotID : selectedModuleAllTimeSlots){
-                    String timeSlotDescription=modulePQ.getTimeSlot(selectedModule,timeSlotID);
-                    modulePQ.deleteTimeSlot(selectedModule,timeSlotID);
-                    modulePQ.addTimeSlot(moduleCode,timeSlotID,timeSlotDescription);
-                }
                 try {
                     write();
                 } catch (IOException e) {
@@ -398,7 +396,7 @@ public class Admin extends Application{
                         if (modulePQ.timeSlotDescriptionMap.get(new Pair(PQView.moduleCode, timeSlotID)).equals(PQView.timeSlot)){
                             try {
                                 PQView.studentID = (String) modulePQ.getTimeSlotPQ(selectedModule, timeSlotID).top().getItem();
-                                PQView.pref = "" + (((Integer) modulePQ.getTimeSlotPQ(selectedModule, timeSlotID).top().getPriority() / 1000) + 1 );
+                                PQView.pref = "" + ((((Integer) modulePQ.getTimeSlotPQ(selectedModule, timeSlotID).top().getPriority() - 1) / 1000) + 1 );
                             }catch(Exception e){
                                 Alert a = new Alert(Alert.AlertType.WARNING);
                                 a.setHeaderText("Priority Queue is Empty!");
@@ -438,6 +436,7 @@ public class Admin extends Application{
             if (modulePQ.timeSlotDescriptionMap.get(new Pair(PQView.moduleCode, timeSlotID)).equals(PQView.timeSlot)){
                 try {
                     String student = modulePQ.getTimeSlotPQ(selectedModule, timeSlotID).dequeue();
+                    timeVacancy.put(new Pair<>(selectedModule, PQView.timeSlot),timeVacancy.get(new Pair<>(selectedModule, PQView.timeSlot))+1);
                     Alert a = new Alert(Alert.AlertType.CONFIRMATION);
                     a.setHeaderText("Dequeued student " + student + "!");
                     a.show();
