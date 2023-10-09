@@ -104,7 +104,7 @@ public class Student extends Application{
             String line = scanner.nextLine();
             String[] args = line.split(",", 4);
             moduleDetails.put(args[0], args[1]);
-            moduleDescriptions.put(args[0], args[3]);
+            moduleDescriptions.put(args[0], args[2]);
         }
         scanner.close();
 

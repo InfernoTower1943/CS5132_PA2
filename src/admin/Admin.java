@@ -236,10 +236,11 @@ public class Admin extends Application{
                                 new Pair<>(selectedModule, selectedTimeSlot))));
 
                         timeSlotEditButton.setDisable(false);
-
+                        adminViewPQButton.setDisable(false);
                     }else{
                         timeSlotEditButton.setDisable(true);
                         timeSlotSaveButton.setDisable(true);
+                        adminViewPQButton.setDisable(true);
                     }
                 });
 

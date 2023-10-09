@@ -232,12 +232,7 @@
                               <Separator prefWidth="200.0" />
                               <ButtonBar prefHeight="40.0" prefWidth="185.0">
                                 <buttons>
-                                  <Button fx:id="adminViewPQButton" mnemonicParsing="false" style="-fx-background-color: #a0e698;" text="View Priority Queue" ButtonBar.buttonData="LEFT">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                    </Button>
-                                    <Button maxWidth="100.0" mnemonicParsing="false" style="-fx-background-color: ff5459;" text="Delete" textFill="WHITE">
+                                  <Button fx:id="adminViewPQButton" disable="true" mnemonicParsing="false" style="-fx-background-color: #a0e698;" text="View Priority Queue" ButtonBar.buttonData="LEFT">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
