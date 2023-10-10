@@ -9,4 +9,5 @@ As a student, you can pick from the various modules. Some of them are required f
 As an admin, you can change the requirements of students, view the preference and priority queue and dequeue students from the priority queue of each module.
 
 Due to some weird stuff, you will need to add the following in your run configurations under VM options to run the code.
+
 --module-path (location of javasdk lib) --add-modules=javafx.controls,javafx.fxml
